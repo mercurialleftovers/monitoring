@@ -1,0 +1,5 @@
+device -id:str-> server(/device/handshake)
+device <-id:int- server(/device/handshake)
+while true:
+	device -sampleData(id, sensorReadings)-> server(/sample/submit)
+	server(/sample/submit) -websocket: sampleData-> web client(js) -> divs updated

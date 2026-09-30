@@ -5,9 +5,9 @@ from typing import Any
 import requests
 
 deviceStringIdentifier: str = "deviceId1322AssaD"  # hardcoded in each device, when setting it up, the MC (arduino), should have a kbd + LCD to do so
-HandshakeURL: str = "http://localhost:8000/device/handshake/"
-SAMPLE_URL: str = "http://localhost:8000/sample/submit/"
-DELTA_TIME: float = 0.2
+HandshakeURL: str = "http://127.0.0.1:8000/device/handshake/"
+SAMPLE_URL: str = "http://127.0.0.1:8000/sample/submit/"
+DELTA_TIME: float = 1.0
 
 # getting a numeric identifier:
 req = requests.get(HandshakeURL + deviceStringIdentifier)
@@ -22,8 +22,6 @@ def takeSample():
 
     data["deviceId"] = numericId
     data["sensorReadings"] = [thermalSensor, vibrationSensor]
-    # for benchmarking:
-    data["timeSampled"] = time.perf_counter()
 
     return data
 
@@ -33,7 +31,8 @@ while True:
     data = takeSample()
     # send the data:
     response = requests.post(url=SAMPLE_URL, json=data)
-    print(response.json())
+    # print(response.json())
     currentTime = time.perf_counter()
     print(currentTime - beginTime)  # dt
     beginTime = currentTime
+    time.sleep(DELTA_TIME)

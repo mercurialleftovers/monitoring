@@ -11,5 +11,13 @@
 		{{ device.deviceName}}
 		{% endfor %}
 	</div>
+	<script>
+		const ws = new WebSocket("/ws");
+		
+		ws.onmessage = function(event) {
+			console.log(`received:\n${event.data}`)
+		}
+
+	</script>
 </body>
 </html>

@@ -24,7 +24,7 @@ class Sample(BaseModel):
     deviceId: int
     sensorReadings: list[SensorData]
     # for benchmarking:
-    timeSampled: float
+    # timeSampled: float
 
 
 class Device(BaseModel):
