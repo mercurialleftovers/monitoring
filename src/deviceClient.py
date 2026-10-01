@@ -27,6 +27,7 @@ def takeSample():
 
 
 beginTime = time.perf_counter()
+
 while True:
     data = takeSample()
     # send the data:

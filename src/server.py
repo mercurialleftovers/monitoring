@@ -1,5 +1,5 @@
-from queue import Queue
 import asyncio
+from queue import Queue
 
 from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import HTMLResponse
@@ -15,6 +15,7 @@ app.mount("/static", StaticFiles(directory="./static"), name="static")
 
 wsManger = WSManager()
 readings: Queue[Sample] = Queue()
+currentId: int = 0
 
 templates = Jinja2Templates(directory="templates")
 
@@ -30,7 +31,9 @@ def get_home(req: Request) -> HTMLResponse:
 
 @app.get("/device/handshake/{deviceId}")
 def device_handshake(deviceId: str):
-    return {"deviceId": deviceId, "id": 1}
+    global currentId
+    currentId += 1
+    return {"deviceId": deviceId, "id": currentId}
 
 
 @app.post("/sample/submit")
