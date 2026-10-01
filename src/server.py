@@ -1,4 +1,5 @@
 from queue import Queue
+import asyncio
 
 from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import HTMLResponse
@@ -52,9 +53,10 @@ async def manage_websockets(ws: WebSocket):
             if readings.qsize() > 0:
                 await ws.send_text(
                     # json.dumps(readings.get().model_dump())
-                    # readings.get().model_dump_json()
-                    readings.get(block=True).model_dump_json()
+                    readings.get().model_dump_json()
+                    # readings.get(block=True).model_dump_json()
                 )  # NOTE(bader): Queue.get has a block=True arg, which makes the thread wait until elements exist
+            await asyncio.sleep(1)
     except WebSocketDisconnect:
         print(f"ws {ws} closed.")
         await wsManger.disconnect(ws)

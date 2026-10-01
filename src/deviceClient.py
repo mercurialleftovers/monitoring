@@ -7,7 +7,7 @@ import requests
 deviceStringIdentifier: str = "deviceId1322AssaD"  # hardcoded in each device, when setting it up, the MC (arduino), should have a kbd + LCD to do so
 HandshakeURL: str = "http://127.0.0.1:8000/device/handshake/"
 SAMPLE_URL: str = "http://127.0.0.1:8000/sample/submit/"
-DELTA_TIME: float = 1.0
+DELTA_TIME: float = 2.0
 
 # getting a numeric identifier:
 req = requests.get(HandshakeURL + deviceStringIdentifier)

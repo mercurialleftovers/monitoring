@@ -15,7 +15,21 @@
 		const ws = new WebSocket("/ws");
 		
 		ws.onmessage = function(event) {
-			console.log(`received:\n${event.data}`)
+			console.log(`received:\n${event.data}`);
+			const data = JSON.parse(event.data);
+			console.log(data);
+
+			// rendering html elements:
+			// checking existing device div:
+			let deviceId = `device_${data.deviceId}`
+			let device = document.getElementById(deviceId);
+			if (device) return;
+			let deviceDiv = document.createElement("div");
+			let deviceLabelHeader = document.createElement("h2");
+			let deviceLabelText = document.createTextNode(`device_${data.deviceId}`);
+			deviceDiv.appendChild(deviceLabelHeader);
+			deviceLabelHeader.appendChild(deviceLabelText);
+			document.getElementById("devices").appendChild(deviceDiv)
 		}
 
 	</script>
