@@ -1,18 +1,6 @@
-from enum import Enum
-
 from pydantic import BaseModel
 
-
-class DeviceType(Enum):
-    MOTOR = "MOTOR"
-    AGITATOR = "AGITATOR"
-    SURPRESSOR = "SURPRESSOR"
-    COMPRESSOR = "COMPRESSOR"
-
-
-class SensorType(Enum):
-    THERMAL = "THERMAL"
-    VIBRATION = "VIBRATION"
+from enums import *
 
 
 class SensorData(BaseModel):
@@ -27,7 +15,7 @@ class Sample(BaseModel):
     # timeSampled: float
 
 
-class Device(BaseModel):
-    # id: int  # given by the database
-    name: str  # unique ?
+class DeviceInfo(BaseModel):
+    identifier: str  # unique
+    name: str  # human readable
     deviceType: DeviceType

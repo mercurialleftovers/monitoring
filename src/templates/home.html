@@ -7,72 +7,23 @@
 </head>
 <body>
 	<div id="devices">
+		<!-- maybe have python iterate over the enums and generate the categories programmatically	 -->
+		<div class="category agitators"></div>
+		<div class="category surpressors"></div>
+		<div class="category compressors"></div>
+		<div class="category pumps"></div>
+		<!-- <div class="category motors"></div> -->
 	</div>
-	<script>
-		const ws = new WebSocket("/ws");
-		
-		ws.onmessage = function(event) {
-			// console.log(`received:\n${event.data}`);
-			const data = JSON.parse(event.data);
-			// rendering html elements:
-
-			// checking existing device div:
-			let deviceId = `device_${data.deviceId}`
-			let deviceDiv = document.getElementById(deviceId);
-
-			// creating the container div, and subsequent child divs
-			if (!deviceDiv) {
-				deviceDiv = document.createElement("div");
-				deviceDiv.id = deviceId;
-				// adding the device identifier header
-				let deviceLabelHeader = document.createElement("h2");
-				let deviceLabelText = document.createTextNode(`device_${data.deviceId}`);
-				deviceLabelHeader.appendChild(deviceLabelText);
-				// temperature
-				let temperatureHeader = document.createElement("h3");
-				let temperatureLabel = document.createElement("p");
-				let temperatureHeaderText = document.createTextNode(`temperature`);
-				temperatureLabel.id = `${deviceId}_temperature`
-				temperatureHeader.appendChild(temperatureHeaderText)
-				// vibration
-				let vibrationHeader = document.createElement("h3");
-				let vibrationLabel = document.createElement("p");
-				let vibrationHeaderText = document.createTextNode(`vibration`);
-				vibrationLabel.id = `${deviceId}_vibration`
-				vibrationHeader.appendChild(vibrationHeaderText)
-				// adding elements
-				deviceDiv.appendChild(deviceLabelHeader);
-				deviceDiv.appendChild(temperatureHeader);
-				deviceDiv.appendChild(temperatureLabel);
-				deviceDiv.appendChild(vibrationHeader);
-				deviceDiv.appendChild(vibrationLabel);
-				// inserting the deviceDiv
-				document.getElementById("devices").appendChild(deviceDiv)
-			}
-
-			// updating values:
-			let temperatureLabel = document.getElementById(`${deviceId}_temperature`);
-			let vibrationLabel = document.getElementById(`${deviceId}_vibration`);
-			
-			for (let reading of data.sensorReadings) {
-				if (reading["sensor"] == "THERMAL") {
-					if (temperatureLabel)
-					{
-						temperatureLabel.textContent = reading["value"];
-					}
-				}
-
-				if (reading["sensor"] == "VIBRATION") {
-					if (vibrationLabel)
-					{
-						vibrationLabel.textContent = reading["value"];
-					}
-				}
-			}
-
-
+	<script src="static\js\main.js">
+	</script>
+	<style>
+		img {
+			width: 50px;
 		}
 
-	</script>
+		.device {
+			border: 1px solid black;
+		}
+	</style>
 </body>
 </html>
