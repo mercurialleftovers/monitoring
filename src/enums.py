@@ -6,6 +6,7 @@ class DeviceType(Enum):
     AGITATOR = "AGITATOR"
     SURPRESSOR = "SURPRESSOR"
     COMPRESSOR = "COMPRESSOR"
+    PUMP = "PUMP"
 
 
 class Department(Enum):
@@ -14,8 +15,16 @@ class Department(Enum):
     BIOFOR = "BIOFOR"
     CHARBON_ACTIF = "CHARBON_ACTIF"
     OZONATION = "OZONATION"
+    SURPRESSEURS = "SURPRESSEURS"
 
 
 class SensorType(Enum):
     THERMAL = "THERMAL"
     VIBRATION = "VIBRATION"
+
+
+class Function(Enum):
+    TECHNICIAN = "TECHNICIAN"
+    ENGINEER = "ENGINEER"
+    OPERATOR = "OPERATOR"
+    SUPERVISOR = "SUPERVISOR"

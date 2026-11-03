@@ -1,0 +1,3 @@
+
+{"detail":[{"type":"missing","loc":["body","identifier"],"msg":"Field required","input":{}},{"type":"missing","loc":["body","name"],"msg":"Field required","input":{}},{"type":"missing","loc":["body","device
+Type"],"msg":"Field required","input":{}},{"type":"missing","loc":["body","department"],"msg":"Field required","input":{}}]}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+
+	<form class="registerDevice" id="userRegisterForm" action="{{url_for('register_user_api')}}" method="post" enctype="multipart/form-data">
+		<label for="username">username</label>
+		<input name="username" />
+
+		<label for="firstname">firstname</label>
+		<input name="firstname" />
+
+		<label for="lastname">lastname</label>
+		<input name="lastname" />
+
+		<label for="phone">phone</label>
+		<input name="phone" />
+
+		<label for="email">email</label>
+		<input name="email" />
+
+		<label for="password">password</label>
+		<input name="password" type="password" />
+
+		<label for="function">function</label>
+		<select name="function">
+			{% for function in functions %}
+			<option value="{{function}}">{{function}}</option>
+			{% endfor %}
+		</select>
+
+		<input name="profile_pic" type="file" accept="image/*"  />
+
+		<input type="submit" value="register" />
+	</form>
+
+	<script src="{{url_for('static', path='js\create_user.js')}}"></script>
+</div>
+{% endblock %}
+

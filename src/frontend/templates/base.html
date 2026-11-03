@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{url_for('static', path='css/base.css')}}">
+	{%if title %}
+		<title>{{title}}</title>
+	{% else %}
+		<title>{{title}}</title>
+	{% endif %}
+</head>
+<body>
+	<div class="main">
+		<div class="header">
+			<a href="/" class = "brand nameButton">
+					<img src="{{url_for('static', path='/images/icons/kleopatra-symbolic.svg')}}" alt="logo" class="logo">
+					<span class="codename">Sentinel</span>
+			</a>
+			<div class="navbar">
+				<a class="link nameButton" href="{{url_for('register_device_view')}}"><img src="{{url_for('static', path='/images/icons/computer.svg')}}" alt="add device"/><span>Add device</span></a>
+				<a class="link nameButton" href="{{url_for('register_user_view')}}"><img src="{{url_for('static', path='/images/icons/list-add-user.svg')}}" alt="add user"/><span>Add user</span></a>
+			</div>
+		</div>
+		{% block content %}
+		{% endblock %}
+	</div>
+</body>
+</html>

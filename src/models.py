@@ -20,6 +20,16 @@ class Device(Model):
     department: Mapped[Department] = mapped_column()
 
 
-print("models being created ...")
-# Model.metadata.drop_all(bind=engine)
+class User(Model):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(unique=True)
+    email: Mapped[str] = mapped_column(unique=True)
+    firstname: Mapped[str] = mapped_column()
+    lastname: Mapped[str] = mapped_column()
+    function: Mapped[Function] = mapped_column()
+
+
+Model.metadata.drop_all(bind=engine)
 Model.metadata.create_all(bind=engine)

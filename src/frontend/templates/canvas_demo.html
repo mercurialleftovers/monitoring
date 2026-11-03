@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="canvas_container">
+		<canvas id="plottingCanvas" height='400' width='400'></canvas>
+	</div>
+
+	<script src="static/js/canvas_demo.js"></script>	
+	<style>
+		.canvas_container {
+			margin-top: 7rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		#plottingCanvas {
+			border: 1px solid black;
+			background-color: yellow;
+		}
+	</style>
+
+{% endblock %}

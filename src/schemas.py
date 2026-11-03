@@ -19,3 +19,12 @@ class DeviceInfo(BaseModel):
     identifier: str  # unique
     name: str  # human readable
     deviceType: DeviceType
+    department: Department
+
+
+class User(BaseModel):
+    username: str
+    email: str
+    firstname: str
+    lastname: str
+    function: Function
