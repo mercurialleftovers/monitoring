@@ -1,0 +1,103 @@
+// device -id:str-> server(/device/handshake)
+// device <-id:int- server(/device/handshake)
+// while true:
+// 	device -sampleData(id, sensorReadings)-> server(/sample/submit)
+// 	server(/sample/submit) -websocket: sampleData-> web client(js) -> divs updated
+//
+//
+#set heading(numbering: "1.1")// A.1, 1.1. etc
+
+= typst notes
+
+lists:
+- (not numbered)
++ (numbered)
+
+italics: _here_
+bold: *here*
+
+== tables (and figures):
+
+#figure(
+  caption: [My Table],
+  table(
+    columns: (auto, auto),
+    stroke: none,
+    table.hline(stroke: 0.5em),
+    table.header([*Column 1*], [*Column 2*]),
+    table.hline(stroke: 0.255555em, start: 1),
+    // start: which columns does it start
+    "entry1", "entry2",
+  ),
+)
+
+== figures
+
+#figure(caption: [My image], image("images/favicon.png", width: 3cm))
+
+this is a favicon #cite(label("industrial_maintenance"))
+
+this is a favicon @industrial_maintenance
+
+== references
+
+#bibliography("refs.bib")
+
+
+== vibration analysis notes
+
+machine rotates => generates vibration => accelerometer captures said vibration, a voltage is generated correspondingly => things are plotted in time-waveform (amplitude vs time) and/or spectrum (amplitude vs frequency) via FFT.
+
+Vibration is identified by the following components:
+
+- Frequency – Used to determine how often a vibration is occurring
+- Amplitude – Used to determine the severity/magnitude of a vibration
+- Phase – Used to determine the *relationship between two signals of the same frequency*, measured in *degrees*
+
++ *Trend analysis*: is the practice of collecting historical data and examining it to spot patterns, directional movements, or recurring themes over time
++ *Time domain data*: time demain is the *amplitude variation* over *time*: a vibration signal is detected from a transducer (converts physical quantity into electrical signal), it is displayed on an oscilloscope as a waveform.
+
+*Time Domain vs. Frequency Domain*: The time domain shows how a signal's amplitude changes moment-by-moment (like on an oscilloscope), whereas the frequency domain shows the strength (magnitude) and phase of each underlying sine wave frequency
+
+#figure(image("images/vibration-2.png"), caption: [A Waveform])
+
+== Les procédées de traitement
+
+Pour assurer une production d'eau potable continu la chaîne de traitement qui constituée des étapes suivantes:
+
+```mermaid
+block-beta
+    columns 1
+    block
+    columns 7
+        a space b space c space d
+    end
+    block
+    columns 7
+        h space g space f space e
+    end
+    block
+    columns 7
+        i space j space space space space
+    end
+    a-->b
+    b-->c
+    c-->d
+    d-->e
+    e-->f
+    f-->g
+    g-->h
+    h-->i
+    i-->j
+
+    a["Entre l'eau de\n Barrage de Beni\n Haroun ou Sidi Khelifa"]
+    b["Brise Charge"]
+    c["Bassin D'aeration"]
+    d["Pre-Ozonation"]
+    e["Coagulation\nEt\nFloculation"]
+    f["Decantation"]
+    g["Filtration Biologique"]
+    h["Post Ozonation"]
+    i["Filtration Sur\nCharbon Actif"]
+    j["Desinfection Finale"]
+```
