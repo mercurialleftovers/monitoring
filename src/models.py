@@ -13,7 +13,7 @@ class Device(Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)  # user readable name
     deviceName: Mapped[str] = mapped_column()  # user readable name
-    identifier: Mapped[str] = mapped_column(
+    tag: Mapped[str] = mapped_column(
         unique=True
     )  # the unique id that is entered at the level of the MC
     category: Mapped[DeviceType] = mapped_column()
@@ -28,7 +28,7 @@ class User(Model):
     email: Mapped[str] = mapped_column(unique=True)
     firstname: Mapped[str] = mapped_column()
     lastname: Mapped[str] = mapped_column()
-    function: Mapped[Function] = mapped_column()
+    role: Mapped[Role] = mapped_column()
 
 
 Model.metadata.drop_all(bind=engine)

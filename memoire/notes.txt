@@ -3,8 +3,29 @@
 // while true:
 // 	device -sampleData(id, sensorReadings)-> server(/sample/submit)
 // 	server(/sample/submit) -websocket: sampleData-> web client(js) -> divs updated
-//
-//
+
+
+todo:
++ formatting output in JS: for temperature and vibration values to be rendered beautifully
++ generating scienatifically plausible random samples (numpy and his friends)
++ parallelism in python (or at least concurrency)
++ formatting output in Python: just an itch
++ add a pin function to devices which follow every user to view his pinned devices first
+  - they should be rendered as such:
+  ```jinja
+  {% for device in devices %}
+  	{%if device in user.pinned%}
+  		{{device.name}}
+  		{% devices.remove(device)}
+  	{% endif %}
+  {%%}
+
+  {% for category in categories %}
+  <!-- the usual -->
+  {%%}
+  ```
++ if you add a device manually, adding the rest with the script does not trigger a homeparge reload, maybe open a websocket between the client and /device/register
+
 #set heading(numbering: "1.1")// A.1, 1.1. etc
 
 = typst notes

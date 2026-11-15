@@ -1,34 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content">
 
-	<form class="registerDevice" action="{{url_for('register_device_api')}}" method="post">
-		<label for="identifier">identifier</label>
-		<input name="identifier" />
+<form action="{{url_for('register_device_api')}}" method="post" enctype="multipart/form-data" class="border rounded p-8 m-4 grid sm:grid-cols-2 items-center justify-center gap-4">
+	<label for="name">name</label>
+	<input name="name"  class="border rounded"/>
 
-		<label for="name">name</label>
-		<input name="name" />
+	<label for="tag">tag</label>
+	<input name="tag" value="@" class="border rounded"/>
 
-		<label for="department">department</label>
-		<select name="department">
-			{% for department in departments %}
-			<option value="{{department}}">{{department}}</option>
-			{% endfor %}
-		</select>
+	<label for="category">device type</label>
+	<select name="deviceType" class="border rounded p-1">
+		{% for category in categories %}
+		<option value="{{category}}">{{category}}</option>
+		{% endfor %}
+	</select>
 
-
-		<label for="category">category</label>
-		<select name="deviceType">
-			{% for category in categories %}
-			<option value="{{category}}">{{category}}</option>
-			{% endfor %}
-		</select>
+	<label for="department">department</label>
+	<select name="department" class="border rounded p-1">
+		{% for department in departments %}
+		<option value="{{department}}">{{department}}</option>
+		{% endfor %}
+	</select>
 
 
-		<input type="submit" value="register" />
-	</form>
+	<div class="col-span-2 flex justify-center">
+		<input name="device_image" type="file" accept="image/*" value="choose a picture" class="border rounded p-1 hover:bg-orange-200 hover:mouse:hand h-40 w-40" />
+	</div>
 
-</div>
+	<input type="submit" value="register" class="border rounded p-1 bg-blue-200 col-span-2"/>
+</form>
+
 {% endblock %}
-

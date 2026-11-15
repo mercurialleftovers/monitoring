@@ -3,27 +3,64 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{{url_for('static', path='css/base.css')}}">
+	<!-- <link rel="stylesheet" href="{{url_for('static', path='css/base.css')}}"> -->
+	<script src="{{url_for('static', path='js/tailwind.js')}}"></script>
+	<script src="{{url_for('static', path='js/chart.js')}}"></script>
 	{%if title %}
-		<title>{{title}}</title>
+	<title>{{title}}</title>
 	{% else %}
-		<title>{{title}}</title>
+	<title>I Am Monitoring The Situation</title>
 	{% endif %}
 </head>
 <body>
-	<div class="main">
-		<div class="header">
-			<a href="/" class = "brand nameButton">
-					<img src="{{url_for('static', path='/images/icons/kleopatra-symbolic.svg')}}" alt="logo" class="logo">
-					<span class="codename">Sentinel</span>
-			</a>
-			<div class="navbar">
-				<a class="link nameButton" href="{{url_for('register_device_view')}}"><img src="{{url_for('static', path='/images/icons/computer.svg')}}" alt="add device"/><span>Add device</span></a>
-				<a class="link nameButton" href="{{url_for('register_user_view')}}"><img src="{{url_for('static', path='/images/icons/list-add-user.svg')}}" alt="add user"/><span>Add user</span></a>
+		<!-- main container -->
+		<div class="flex flex-col h-screen">
+			<!-- header -->
+			<div class="w-full flex justify-between items-center p-3 border rounded">
+				<!-- title -->
+				<a href="/" class"hover:cursor:hand"><div class="p-1 border rounded flex items-center justify-between gap-1 hover:bg-green-200"><span>👁</span><span class="hidden sm:block">Monitoring</span></div></a>
+				<!-- search tool -->
+				{% if devices | length > 0 %}
+				<div class="flex gap-1 items-center grow px-2">
+					<button class="border rounded p-1 hover:bg-green-200 hover:cursor:hand" onclick="toggleSearchBar()">🔍</button>
+
+					<div id="searchDiv" class="flex gap-1 grow">
+						<input id="searchBar" class="p-1 border rounded hover:bg-orange-100 grow" />
+						<button id="resetButton" class="enabled p-1 border rounded hover:bg-red-300 hover:cursor:hand">🧹</button>
+					</div>
+				</div>
+				{% endif %}
+				<!-- -->
+				<div class="flex gap-2">
+					<!-- user profile -->
+					<a href="/profile" class="hover:mouse:pointer">
+						<div class="border rounded p-1 flex items-center gap-1 hover:bg-green-200">
+							<span>👤</span>
+							<span class="hidden sm:block">profile</span>
+						</div>
+					</a>
+
+					<!-- user notifications -->
+					<div class="border rounded p-1 flex items-center gap-1 hover:bg-green-200 hover:mouse:pointer">
+						<span>🔔</span>
+						<span class="hidden sm:block">notifications</span>
+					</div>
+				</div>
 			</div>
-		</div>
-		{% block content %}
-		{% endblock %}
+
+			<!-- content -->
+			<section class="flex flex-col grow justify-center items-center">
+				{% block content %}
+				{% endblock%}
+			</section>
+
+			<!-- footer -->
+			<div class="footer p-3 flex justify-around border rounedd">
+				<a href="{{url_for('register_user_view')}}"><div class="p-1 border rounded">👥add user</div></a>
+				<a href="{{url_for('register_device_view')}}"><div class="p-1 border rounded">🖥 add device</div></a>
+			</div>
+
 	</div>
 </body>
+	<script src="{{url_for('static', path='js/search.js')}}"></script>
 </html>

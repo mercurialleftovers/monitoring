@@ -1,40 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content">
 
-	<form class="registerDevice" id="userRegisterForm" action="{{url_for('register_user_api')}}" method="post" enctype="multipart/form-data">
-		<label for="username">username</label>
-		<input name="username" />
+<form action="{{url_for('register_device_api')}}" method="post" enctype="multipart/form-data" class="border rounded p-8 m-4 grid sm:grid-cols-2 items-center justify-center gap-4">
+	<label for="username">username</label>
+	<input name="username"  class="border rounded"/>
 
-		<label for="firstname">firstname</label>
-		<input name="firstname" />
+	<label for="lastname">lastname</label>
+	<input name="lastname"  class="border rounded"/>
 
-		<label for="lastname">lastname</label>
-		<input name="lastname" />
 
-		<label for="phone">phone</label>
-		<input name="phone" />
+	<label for="phone">phone</label>
+	<input name="phone"  class="border rounded"/>
 
-		<label for="email">email</label>
-		<input name="email" />
+	<label for="email">email</label>
+	<input name="email"  class="border rounded"/>
 
-		<label for="password">password</label>
-		<input name="password" type="password" />
+	<label for="tag">tag</label>
+	<input name="tag" value="@" class="border rounded"/>
 
-		<label for="function">function</label>
-		<select name="function">
-			{% for function in functions %}
-			<option value="{{function}}">{{function}}</option>
-			{% endfor %}
-		</select>
 
-		<input name="profile_pic" type="file" accept="image/*"  />
+	<label for="role">role</label>
+	<select name="role" class="border rounded p-1">
+		{% for role in roles %}
+		<option value="{{role}}">{{role}}</option>
+		{% endfor %}
+	</select>
 
-		<input type="submit" value="register" />
-	</form>
+	<div class="col-span-2 flex justify-center">
+		<input name="profile_pic" type="file" accept="image/*" value="choose a picture" class="border rounded p-1 hover:bg-orange-200 hover:mouse:hand h-40 w-40" />
+	</div>
 
-	<script src="{{url_for('static', path='js\create_user.js')}}"></script>
-</div>
+	<!-- <div class="flex justify-center"> -->
+	<!-- 	<div class="rounded border p-1"> -->
+	<!-- 		img preview -->
+	<!-- 	</div> -->
+	<!-- </div> -->
+
+	<input type="submit" value="register" class="border rounded p-1 bg-blue-200 col-span-2"/>
+</form>
+
 {% endblock %}
 

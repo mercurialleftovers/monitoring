@@ -23,7 +23,7 @@ class SensorType(Enum):
     VIBRATION = "VIBRATION"
 
 
-class Function(Enum):
+class Role(Enum):
     TECHNICIAN = "TECHNICIAN"
     ENGINEER = "ENGINEER"
     OPERATOR = "OPERATOR"

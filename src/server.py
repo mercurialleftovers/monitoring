@@ -26,12 +26,12 @@ from sqlalchemy.orm import Session
 os.system("clear")
 
 from database import get_db_session
-from enums import DeviceType, Department, Function
+from enums import DeviceType, Department, Role
 from models import Device
 from schemas import DeviceInfo, Sample, User
 from tools import WSManager
 
-app = FastAPI(name="continuous monitoring")
+app = FastAPI(title="continuous monitoring")
 app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 
 wsManger = WSManager()
@@ -80,46 +80,53 @@ def device_handshake(
     ],
 ) -> int:
     device: Device | None = db_session.execute(
-        select(Device).where(Device.identifier == deviceId)
+        select(Device).where(Device.tag == deviceId)
     ).scalar_one_or_none()
     if not device:
         print(
-            f"device with identifier {deviceId} does not exist.",
+            f"device with id {deviceId} does not exist.",
         )
         raise HTTPException(
             status.HTTP_403_FORBIDDEN,
-            f"device with identifier {deviceId} does not exist.",
+            f"device with id {deviceId} does not exist.",
         )
 
+    # TODO(bader): use sessions for security
     return device.id
 
 
 @app.post("/sample/submit")
-def receive_sample(sample: Sample):
-    readings.put(sample)
+async def receive_sample(sample: Sample):
+    # TODO(bader): instead of adding a datum to the quque, sendi t directly through ws
+    for ws_connection in wsManger.active_connections:
+        try:
+            await ws_connection.send_text(sample.model_dump_json())
+        except WebSocketDisconnect:
+            await wsManger.disconnect(ws_connection)
+
     return {"status": "ok"}  # TODO(bader): what is the practice here ?
 
 
 @app.post("/device/register", name="register_device_api")
 def register_device(
-    # device: Annotated[DeviceInfo, Form()],
-    device: DeviceInfo,
+    # device: DeviceInfo,
+    device: Annotated[DeviceInfo, Form()],
     db_session: Annotated[Session, Depends(get_db_session)],
 ):
     existing_device: Device | None = (
-        db_session.execute(select(Device).where(Device.identifier == device.identifier))
+        db_session.execute(select(Device).where(Device.tag == device.tag))
         .scalars()
         .one_or_none()
     )
     if existing_device:
         raise HTTPException(
-            status.HTTP_403_FORBIDDEN, f"device {device.identifier} already exists."
+            status.HTTP_403_FORBIDDEN, f"device {device.tag} already exists."
         )
 
     db_session.add(
         Device(
             deviceName=device.name,
-            identifier=device.identifier,
+            tag=device.tag,
             category=device.deviceType,
             department=device.department,
         )
@@ -141,20 +148,18 @@ def register_device_view(req: Request):
 
 
 @app.post("/device/info")
-def get_device_info(
-    identifier: str, db_session: Annotated[Session, Depends(get_db_session)]
-):
+def get_device_info(tag: str, db_session: Annotated[Session, Depends(get_db_session)]):
     deviceInDb: Device | None = (
-        db_session.execute(select(Device).where(Device.identifier == identifier))
+        db_session.execute(select(Device).where(Device.tag == tag))
         .scalars()
         .one_or_none()
     )
     if not deviceInDb:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            f"no device with id {identifier}",
+            f"no device with id {tag}",
         )
-    return DeviceInfo.from_orm(deviceInDb)
+    return tag.from_orm(deviceInDb)
 
 
 @app.post("/device/byid")
@@ -213,7 +218,7 @@ def add_user_view(req: Request):
         name="create_user.html",
         request=req,
         context={
-            "functions": [fun.value for fun in Function],
+            "roles": [role.value for role in Role],
             "title": "New User",
         },
     )
@@ -235,7 +240,7 @@ async def add_user_api(
     password: Annotated[str, Form()],
     email: Annotated[str, Form()],
     phone: Annotated[str, Form()],
-    function: Annotated[Function, Form()],
+    function: Annotated[Role, Form()],
     # profile_pic: Annotated[bytes | None, File()] = None,
     profile_pic: UploadFile,
 ):
@@ -288,13 +293,22 @@ def render_canvas(req: Request) -> HTMLResponse:
 @app.websocket("/ws")
 async def manage_websockets(ws: WebSocket):
     await wsManger.connect(ws)
-    try:
-        while True:
-            if readings.qsize() > 0:
-                await ws.send_text(readings.get().model_dump_json())
-            await asyncio.sleep(1)
+    # print("ws connection established")
+    # print(f"{len(wsManger.active_connections)} connections maintained connections md")
+    # TODO(bader): fixing this asap
+    # try:
+    # while True:
+    #     if readings.qsize() > 0:
+    #         await ws.send_text(readings.get().model_dump_json())
+    #     await asyncio.sleep(1)
 
-    except WebSocketDisconnect:
-        print(f"ws {ws} closed.")
-        # log instead
-        await wsManger.disconnect(ws)
+    # except WebSocketDisconnect:
+    #     print(f"ws {ws} closed.")
+    #     # log instead
+    #     await wsManger.disconnect(ws)
+    while True:
+        try:
+            await asyncio.sleep(5)
+        except WebSocketDisconnect:
+            await wsManger.disconnect(ws)
+            return

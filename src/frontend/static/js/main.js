@@ -5,25 +5,26 @@ function EstablishConnection() {
 		const sampleData = JSON.parse(event.data);
 		// rendering html elements:
 
-		console.log(sampleData);
+		// console.log(sampleData);
 		// checking existing device div:
 		const deviceId = `device_${sampleData.deviceId}`;
 		const deviceDiv = document.getElementById(deviceId);
 		// const stateImg = document.querySelector(`#${deviceId} .stateCard img`);
 		// const stateLabel = document.querySelector(`#${deviceId} .stateCard p`);
-		const stateCard = document.querySelector(`#${deviceId} .stateCard`);
-		const stateImg = document.querySelector(`#${deviceId} .stateCard img`);
+		// const stateCard = document.querySelector(`#${deviceId} .stateCard`);
+		// const stateImg = document.querySelector(`#${deviceId} .stateCard img`);
 
 		// switching state related classnames: TOOD(bader)
-		console.log(typeof deviceDiv.classList);
+		// console.log(typeof deviceDiv.classList);
 		// deviceDiv.classList.remove("inactive");
 		// deviceDiv.classList.add("active");
 
 		// stateImg.src = "static/images/active.png";
 		// stateLabel.innerText = "active";
-		stateCard.classList.remove("inactive");
-		stateCard.classList.add("active");
-		stateImg.src = "/static/images/icons/flag-green.svg";
+		// TODO
+		// stateCard.classList.remove("inactive");
+		// stateCard.classList.add("active");
+		// stateImg.src = "/static/images/icons/flag-green.svg";
 
 		// updating values:
 		const temperatureLabel = document.getElementById(`${deviceId}_temperature`);
@@ -32,13 +33,13 @@ function EstablishConnection() {
 		for (const reading of sampleData.sensorReadings) {
 			if (reading.sensor === "THERMAL") {
 				if (temperatureLabel) {
-					temperatureLabel.textContent = reading.value;
+					temperatureLabel.textContent = reading.value.toFixed(2);
 				}
 			}
 
 			if (reading.sensor === "VIBRATION") {
 				if (vibrationLabel) {
-					vibrationLabel.textContent = reading.value;
+					vibrationLabel.textContent = reading.value.toFixed(2);
 				}
 			}
 		}
@@ -62,8 +63,10 @@ const delayPromise = (ms) =>
 	});
 
 async function poll() {
+	const devices = document.querySelectorAll(".deviceContainer");
+	let homePageEmpty = devices.length < 1;
+
 	while (homePageEmpty) {
-		// debugger;
 		await delayPromise(2000);
 
 		fetch("devices/count", { method: "GET" })

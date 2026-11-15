@@ -16,7 +16,7 @@ class Sample(BaseModel):
 
 
 class DeviceInfo(BaseModel):
-    identifier: str  # unique
+    tag: str  # unique
     name: str  # human readable
     deviceType: DeviceType
     department: Department
@@ -27,4 +27,4 @@ class User(BaseModel):
     email: str
     firstname: str
     lastname: str
-    function: Function
+    role: Role

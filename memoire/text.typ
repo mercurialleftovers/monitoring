@@ -1,9 +1,9 @@
 // == general architecture
 //
 // === hardware
-// - arduino UNO
+// - esp32
 // - temperature sensors
-// - vibration sensor
+// - vibration sensor (accelerometer)
 // - LCD
 // - keyboard
 // - wifi
@@ -33,6 +33,35 @@
 // - Ministère des Ressources en Eau (MRE). Plan National de l'Eau (PNE) - Horizon 2030, Alger.
 // - Kettab, A. (2001). Les ressources en eau en Algérie : stratégies, enjeux et réalités. Sécheresse, 12(2), 119-124.
 // - Rapport annuel de l'Algérienne des Eaux. Bilan d'activité et statistiques de distribution, Direction Générale de l'ADE, Alger.
+//
+
+== notes
+
++ sommaire
++ optional (resume)
++ introduction generals
++ definitions de la station
+  + hierarchies et services (departments) (+diagrammes)
+  + procedures de traitment
+  + problematique
++ maintenance industrielle
++ machines tournantes (defintion generale + situation reele - station)
+  + pompes
+  + agitateurs
+  + capteurs utilises
++ project
+  + definitions technologies et logiciess
+  + interfaces (comment lutiliszez)
+  + simulations
+  +
+
+// chapitres supplementairs
++ abbreviation
++ equations
++ figures
++ tables
+
+// chaque chapitre : introduction + conclusion
 
 #set text(
   font: "Times New Roman",
@@ -46,6 +75,23 @@
 
 #set heading(numbering: "1.1")
 #show heading: set block(above: 1.5em, below: 1.5em)
+#set page(numbering: "1")
+#outline()
+#outline(title: [table of table], target: figure.where(kind: table))
+#outline(title: [table of images], target: figure.where(kind: image))
+
+// #outline(target: figure.where(kind: equation))
+
+== maintenance industrielle
+
+AFNOR (Association Française de Normalisation) NF-X defines maintenance as: << l’ensemble des activités ayant pour objectif de maintenir ou rétablir un bien dans un état spécifié de fonctionnement pour établir une fonction requise. >>
+
+Les objectifs fixés par la direction permettent de mettre en place une stratégie de maintenance (prise en compte des enjeux humains, techniques, de sécurité, financiers, etc…). De cette stratégie découle ensuite les types de maintenance à déployer.
+
+
+
+La maintenance rassemble donc l’ensemble des actions techniques (prévention, entretien, dépannage, révision et vérification, réparation, contrôle et diagnostic), mais aussi administratives et de management, permettant à une entreprise de conserver le bon fonctionnement des équipements et d’assurer la production.
+
 
 == intro ADE
 
@@ -54,7 +100,7 @@ L’Algérienne des Eaux (ADE) est un établissement public à caractère indust
 === Contexte Historique et Création
 Avant la création de l'ADE, la gestion de l'eau potable en Algérie était fragmentée. Elle relevait principalement de la responsabilité des collectivités locales (les Communes) ou d'unités régionales telles que les EPE/EPEOR (Entreprises Publiques d'Eau) et la régie d'Alger (EPEAL), ce qui entraînait d'importantes disparités techniques, financières et opérationnelles entre les régions.
 
-#figure(image("images/agence_ade.jfif"), caption: [Agence commerciale de l'ADE en Algérie. Source: ADE])
+#figure(image("images/agence_ade.jpg"), caption: [Agence commerciale de l'ADE en Algérie. @ade_dz])
 
 - Cadre Juridique de Création : L'Algérienne des Eaux a été formellement créée par le Décret exécutif n° 01-101 du 21 avril 2001.
 
@@ -111,7 +157,7 @@ Une vane de régulation de pression réduit la pression de 4 bars à 1.1 bars en
 L’obturateur à disque permet de dissiper l’énergie excédentaire de l’eau brute et de cette facon assurer un équilibre hydroulique d’arrivée d’eau.
 Une vanne de régulation de débit(vanne papillon automatique) permet d’ajuster le débit suivant une consigne fixée.
 
-#figure(image("images/bassin_brise_charge.png", width: 50%), caption: [bassin de brise charge])
+#figure(image("images/bassin_brise_charge.png", width: 80%), caption: [bassin de brise charge])
 
 === bassin d’aération:
 
@@ -123,7 +169,7 @@ L’aération de l’eau brute à traiter à pour objectifs:
 - D’assurer l’oxygénation de l’eau brut pour permettre une saturation en $O_2$ dissous nécessaire à l’oxydation de certains éléments minéraux et organiques.
 - De permettre aux bactéries nitrifiantes de proliférer (bactéries aérobies)
 
-#figure(image("images/bassin_aeration.png", width: 50%), caption: [bassin d'aeration])
+#figure(image("images/bassin_aeration.png", width: 80%), caption: [bassin d'aeration])
 
 === la préozonation (préoxydation):
 
@@ -231,8 +277,8 @@ Le charbon actif en grain est un matériau qui a subit un traitement thermique s
 Les molécules organiques de tout type se fixent à la surface du charbon, mais aussi d’autres composés comme le charbon et certains métaux lourds.
 
 
-#figure(image("images/cag.jpg", width: 100%), caption: [diagram de cag 1 @cag])
-#figure(image("images/cag_2.jpg", width: 60%), caption: [diagrame de cag 2 @cag_2])
+#figure(image("images/cag.jpg", width: 100%), caption: [cag @cag])
+#figure(image("images/cag_2.jpg", width: 60%), caption: [diagrame de cag @cag_2])
 #figure(image("images/cag_shema.png", width: 100%), caption: [mechanisme de fonction de cag @article_cag])
 
 
