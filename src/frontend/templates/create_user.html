@@ -2,23 +2,24 @@
 
 {% block content %}
 
-<form action="{{url_for('register_device_api')}}" method="post" enctype="multipart/form-data" class="border rounded p-8 m-4 grid sm:grid-cols-2 items-center justify-center gap-4">
+<form action="{{url_for('register_user_api')}}" method="post" enctype="multipart/form-data" class="border rounded p-8 m-4 grid sm:grid-cols-2 items-center justify-center gap-4">
 	<label for="username">username</label>
 	<input name="username"  class="border rounded"/>
 
 	<label for="lastname">lastname</label>
 	<input name="lastname"  class="border rounded"/>
 
+	<label for="password">password</label>
+	<input name="password"  type="password" class="border rounded"/>
+
+	<label for="firstname">firstname</label>
+	<input name="firstname"  class="border rounded"/>
 
 	<label for="phone">phone</label>
 	<input name="phone"  class="border rounded"/>
 
 	<label for="email">email</label>
 	<input name="email"  class="border rounded"/>
-
-	<label for="tag">tag</label>
-	<input name="tag" value="@" class="border rounded"/>
-
 
 	<label for="role">role</label>
 	<select name="role" class="border rounded p-1">

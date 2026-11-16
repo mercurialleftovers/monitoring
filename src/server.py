@@ -27,8 +27,10 @@ os.system("clear")
 
 from database import get_db_session
 from enums import DeviceType, Department, Role
-from models import Device
-from schemas import DeviceInfo, Sample, User
+from models import Device, User
+
+# from schemas import DeviceInfo, Sample, UserSchema
+from schemas import DeviceInfo, Sample
 from tools import WSManager
 
 app = FastAPI(title="continuous monitoring")
@@ -159,7 +161,7 @@ def get_device_info(tag: str, db_session: Annotated[Session, Depends(get_db_sess
             status.HTTP_404_NOT_FOUND,
             f"no device with id {tag}",
         )
-    return tag.from_orm(deviceInDb)
+    return DeviceInfo.from_orm(deviceInDb)
 
 
 @app.post("/device/byid")
@@ -212,6 +214,81 @@ def setup_device(
     )
 
 
+@app.post(
+    "/device/register",
+    name="register_device_api",
+    tags=[
+        "device management",
+    ],
+)
+async def add_device_api(
+    req: Request,
+    db_session: Annotated[Session, Depends(get_db_session)],
+    # device fields
+    name: Annotated[str, Form()],
+    tag: Annotated[str, Form()],
+    department: Annotated[Department, Form()],
+    category: Annotated[DeviceType, Form()],
+    device_image: UploadFile,
+):
+    # checking if username exsits:
+    device_in_db: Device | None = db_session.execute(
+        select(Device).where(Device.tag == tag)
+    ).scalar_one_or_none()
+
+    if device_in_db:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"device @{tag} already exists",
+        )
+
+    # TODO(bader): img file validation: extension + size
+    device_image_saved: bool = False
+    if device_image:
+        device_image_path: str = f"frontend/static/images/devices_images/{tag}"
+        print(device_image_path)
+
+        with open(device_image_path, "wb") as device_image_file:
+            device_image_file.write(device_image.file.read())
+            device_image_saved = True
+
+    new_device: User = User(
+        name=name,
+        tag=tag,
+        department=department,
+        category=category,
+        has_image=device_image_saved,
+    )
+
+    # adding new device to db
+    db_session.add(new_device)
+
+    return {
+        "name": name,
+        "tag": tag,
+        "department": department,
+        "category": category,
+        "has_image": device_image_saved,
+    }
+    # return RedirectResponse("/devices")
+
+
+@app.get("/devices", name="devices_view", include_in_schema=False)
+def get_devices(
+    req: Request,
+    db_session: Annotated[Session, Depends(get_db_session)],
+):
+    devices = db_session.execute(select(Device)).scalars().all()
+    return templates.TemplateResponse(
+        request=req,
+        name="devices.html",
+        context={
+            "title": "devices",
+            "devices": devices,
+        },
+    )
+
+
 @app.get("/user/register", name="register_user_view", include_in_schema=False)
 def add_user_view(req: Request):
     return templates.TemplateResponse(
@@ -234,43 +311,81 @@ def add_user_view(req: Request):
 # def add_user_api(user: Annotated[User, Form()]):
 async def add_user_api(
     req: Request,
+    db_session: Annotated[Session, Depends(get_db_session)],
+    # user fields
     username: Annotated[str, Form()],
     firstname: Annotated[str, Form()],
     lastname: Annotated[str, Form()],
     password: Annotated[str, Form()],
     email: Annotated[str, Form()],
     phone: Annotated[str, Form()],
-    function: Annotated[Role, Form()],
-    # profile_pic: Annotated[bytes | None, File()] = None,
+    role: Annotated[Role, Form()],
     profile_pic: UploadFile,
 ):
-    print(type(profile_pic))  # whether an api is needed to extract the actual file
+    # checking if username exsits:
+    user_in_db: User | None = db_session.execute(
+        select(User).where(User.username == username)
+    ).scalar_one_or_none()
 
-    # validation
-    # inserting user into the db
-    # moving the profile_pic into the static profile_pics folder
+    if user_in_db:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"user {username} already exists",
+        )
+
+    # TODO(bader): img file validation: extension + size
+    profile_pic_saved: bool = False
     if profile_pic:
-        profile_pics_dir: Path = Path(req.url_for("static", path="images/profile_pics"))
-        print(profile_pics_dir)
-        # print(type(profile_pic.file))
-        print(profile_pic.file.read())
-        print(type(profile_pic.file.read()))
+        profile_pic_path: str = f"frontend/static/images/profile_pics/{username}"
+        print(profile_pic_path)
 
-        # TODO(bader): img file validation: extension + size
-        # print(profile_pics_dir)
-        # with open()
-        # shutil.copyfileobj
+        with open(profile_pic_path, "wb") as user_profile_pic:
+            user_profile_pic.write(profile_pic.file.read())
+            profile_pic_saved = True
 
-    return {
-        "username": username,
-        "firstname": firstname,
-        "lastname": lastname,
-        "email": email,
-        "password": password,
-        "function": function,
-        "phone": phone,
-        "profile_pic": profile_pic,
-    }
+    # TODO(bader): prbably email uniqueness is verified by sqlalachemy
+
+    new_user: User = User(
+        username=username,
+        firstname=firstname,
+        lastname=lastname,
+        password=password,
+        email=email,
+        phone=phone,
+        role=role,
+        has_profile_pic=profile_pic_saved,
+    )
+
+    # adding new user to the database
+    db_session.add(new_user)
+    #
+    # return {
+    #     "username": username,
+    #     "firstname": firstname,
+    #     "lastname": lastname,
+    #     "email": email,
+    #     "password": password,
+    #     "function": role,
+    #     "phone": phone,
+    #     "profile_pic": profile_pic,
+    # }
+    # return RedirectResponse("/users")
+
+
+@app.get("/users", name="users_view", include_in_schema=False)
+def get_users(
+    req: Request,
+    db_session: Annotated[Session, Depends(get_db_session)],
+):
+    users = db_session.execute(select(User)).scalars().all()
+    return templates.TemplateResponse(
+        request=req,
+        name="users.html",
+        context={
+            "title": "users",
+            "users": users,
+        },
+    )
 
 
 @app.get("/devices/count")

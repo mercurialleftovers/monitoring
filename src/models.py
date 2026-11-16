@@ -26,9 +26,12 @@ class User(Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
+    phone: Mapped[str] = mapped_column()
+    password: Mapped[str] = mapped_column()
     firstname: Mapped[str] = mapped_column()
     lastname: Mapped[str] = mapped_column()
     role: Mapped[Role] = mapped_column()
+    has_profile_pic: Mapped[bool] = mapped_column(default=False)
 
 
 Model.metadata.drop_all(bind=engine)
