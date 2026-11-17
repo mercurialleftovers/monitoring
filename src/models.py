@@ -12,12 +12,13 @@ class Device(Model):
     __tablename__ = "devices"
 
     id: Mapped[int] = mapped_column(primary_key=True)  # user readable name
-    deviceName: Mapped[str] = mapped_column()  # user readable name
+    name: Mapped[str] = mapped_column()  # user readable name
     tag: Mapped[str] = mapped_column(
         unique=True
     )  # the unique id that is entered at the level of the MC
     category: Mapped[DeviceType] = mapped_column()
     department: Mapped[Department] = mapped_column()
+    has_image: Mapped[bool] = mapped_column(default=False)
 
 
 class User(Model):

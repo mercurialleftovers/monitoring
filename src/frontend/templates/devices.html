@@ -3,15 +3,20 @@
 {% block content %}
 {% if devices | length > 0 %}
 	{% for device in devices %}
-	<div class ="userList border rounded p-1 grid">
+	<div class ="deviceList border rounded p-1 grid grid-cols-1 sm:grid-cols-2 h-full w-full m-2">
 
-		<div class="deviceCard">
+		<div class="deviceCard w-fit">
 			<!-- name and devicename + pic -->
-			<div class = "deviceContainer border rounded p-2 gap-1 flex flex-col w-lg">
-				<div class="flex flex gap-1 items-center">
-					<img class="w-8" src="{{url_for('static', path='images/devices_images')}}/{{device.tag}}"  alt="{{device.name}}'s profile pic'"/>
-					<span>{{device.category}}@{{device.department}}</span>
+			<div class = "deviceContainer border rounded p-2 gap-2 flex flex-col items-center sm:flex-row  w-lg">
+				<img class="w-60 h-60 border p-1" src="{{url_for('static', path='images/devices_images')}}/{{device.tag}}"  alt="{{device.name}}'s profile pic'"/>
+
+				<div class="flex flex-col gap-1 border p-1 grow">
+					<span>{{device.name}}</span>
+					<span>{{device.category.value}}</span>
+					<span>@{{device.tag}}</span>
+					<span>Department: {{device.department.value}}</span>
 				</div>
+
 			</div>
 
 	</div>

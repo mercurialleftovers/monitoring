@@ -109,7 +109,7 @@ async def receive_sample(sample: Sample):
     return {"status": "ok"}  # TODO(bader): what is the practice here ?
 
 
-@app.post("/device/register", name="register_device_api")
+@app.post("/ap1/device/register", name="register_device_api_1")
 def register_device(
     # device: DeviceInfo,
     device: Annotated[DeviceInfo, Form()],
@@ -208,7 +208,7 @@ def setup_device(
         name="devicePage",
         request=req,
         context={
-            "title": f"{device_in_db.deviceName}",
+            "title": f"{device_in_db.name}",
             "device": device_in_db,
         },
     )
@@ -243,6 +243,7 @@ async def add_device_api(
         )
 
     # TODO(bader): img file validation: extension + size
+    os.system("cls")
     device_image_saved: bool = False
     if device_image:
         device_image_path: str = f"frontend/static/images/devices_images/{tag}"
@@ -251,8 +252,11 @@ async def add_device_api(
         with open(device_image_path, "wb") as device_image_file:
             device_image_file.write(device_image.file.read())
             device_image_saved = True
+            print(f"device image saved: {device_image.file.read()}")
+    else:
+        print(f"device image not saved: {device_image.file.read()}")
 
-    new_device: User = User(
+    new_device: Device = Device(
         name=name,
         tag=tag,
         department=department,

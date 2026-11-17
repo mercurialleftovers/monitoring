@@ -35,7 +35,7 @@
 											<!-- sensor real-time data -->
 											<div class="border rounded m-2 p-2 ">🌡temperature</div>
 											<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_temperature" class="font-mono">[temp C^0]</span>C</div>
-											<div class="border rounded m-2 p-2">📳 vibration</div>
+											<div class="border rounded m-2 p-2">📳vibration</div>
 											<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_vibration" class="font-mono">[vib]</span>mm/ms</div>
 
 											<!-- tools -->
@@ -71,7 +71,7 @@
 		<script src="{{url_for('static', path='js/chart.js')}}"
 		<!-- else no device is present -->
 		{% else %}
-				<div class="text-2xl flex justify-around items-center grow">🙂 there are no devices yet.</div>
+			<div class="text-2xl flex justify-around items-center grow">🙂 there are no devices yet.</div>
 		{% endif %}
 
 	<script src="static\js\main.js"></script>
