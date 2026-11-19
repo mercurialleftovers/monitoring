@@ -20,6 +20,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.websockets import WebSocketDisconnect
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
@@ -33,6 +34,7 @@ from models import Device, User
 from schemas import DeviceInfo, Sample
 from tools import WSManager
 
+auth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="continuous monitoring")
 app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
 
@@ -243,7 +245,7 @@ async def add_device_api(
         )
 
     # TODO(bader): img file validation: extension + size
-    os.system("cls")
+
     device_image_saved: bool = False
     if device_image:
         device_image_path: str = f"frontend/static/images/devices_images/{tag}"
@@ -388,8 +390,26 @@ def get_users(
         context={
             "title": "users",
             "users": users,
+            # "roles": [role for role in Role],
+            "roles": db_session.execute(select(User.role).distinct()).scalars(),
+            "emojis": {
+                Role.TECHNICIAN: "⚙",
+                Role.ENGINEER: "⚙",
+                Role.SUPERVISOR: "👁",
+                Role.OPERATOR: "🖐",
+            },
         },
     )
+
+
+@app.post(
+    "/token",
+    tags=[
+        "security",
+    ],
+)
+def auth_user(token: Annotated[str, Depends(auth_scheme)]):
+    return {"token": token}
 
 
 @app.get("/devices/count")
@@ -412,19 +432,7 @@ def render_canvas(req: Request) -> HTMLResponse:
 @app.websocket("/ws")
 async def manage_websockets(ws: WebSocket):
     await wsManger.connect(ws)
-    # print("ws connection established")
-    # print(f"{len(wsManger.active_connections)} connections maintained connections md")
-    # TODO(bader): fixing this asap
-    # try:
-    # while True:
-    #     if readings.qsize() > 0:
-    #         await ws.send_text(readings.get().model_dump_json())
-    #     await asyncio.sleep(1)
-
-    # except WebSocketDisconnect:
-    #     print(f"ws {ws} closed.")
-    #     # log instead
-    #     await wsManger.disconnect(ws)
+    # TODO(bader): find a better alternative (while keeps the connection from closing)
     while True:
         try:
             await asyncio.sleep(5)

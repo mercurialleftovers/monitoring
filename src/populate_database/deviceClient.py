@@ -53,7 +53,14 @@ def monitoringRoutine(tag: str):
             time.sleep(DELTA_TIME)
 
 
-tags: list[str] = []
+name_prefixes = ["pompe", "agitateur", "moteur"]
+
+
+class FakeDevice:
+    i: int = 0
+
+    def __init__(self):
+        return {}
 
 
 def registerDevice(
@@ -124,45 +131,3 @@ if spawnWorkers:
 
     for thread in threads:
         thread.start()
-
-while True:
-    cmd: str = input(">>> ")
-    if cmd == "kill":
-        sys.exit(0)
-    cmd: str = "kill t1"
-    cmd = cmd.strip()
-
-    pattern = r"kill t\d"
-    match = re.search(pattern, cmd)
-    # print(dir(match))
-    # print(match.group(0))
-    # print(match.group(1))
-    # if match:
-    #     print(match.group())
-    #     print(type(match.group()))
-    #     thread_idx = int(match.group(1)) - 1
-    # TODO(bader): stop thread thread_idx
-
-
-"""
-def demo_threads(n: int = 5):
-    import time, threading, requests
-
-    def timer(indent: int = 0):
-        while True:
-            begin_time = time.perf_counter()
-            thread_id = threading.get_ident()
-            # synchronous operation
-            # time.sleep(1)
-            # print(
-            #     f"{indent * '\t'}thread id: {thread_id}, delta_time: {time.perf_counter() - begin_time}"
-            # )
-            res = requests.get("https://www.google.com/")
-            print(f"{indent * '\t'}, {res}")
-
-    for i in range(n):
-        threading.Thread(target=timer, args=(i,)).start()
-
-
-demo_threads()
-"""

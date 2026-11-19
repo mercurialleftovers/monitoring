@@ -20,16 +20,14 @@
 				<!-- title -->
 				<a href="/" class"hover:cursor:hand"><div class="p-1 border rounded flex items-center justify-between gap-1 hover:bg-green-200"><span>👁</span><span class="hidden sm:block">Monitoring</span></div></a>
 				<!-- search tool -->
-				{% if devices | length > 0 %}
 				<div class="flex gap-1 items-center grow px-2">
 					<button class="border rounded p-1 hover:bg-green-200 hover:cursor:hand" onclick="toggleSearchBar()">🔍</button>
 
 					<div id="searchDiv" class="flex gap-1 grow">
 						<input id="searchBar" class="p-1 border rounded hover:bg-orange-100 grow" />
-						<button id="resetButton" class="enabled p-1 border rounded hover:bg-red-300 hover:cursor:hand">🧹</button>
+						<button id="resetButton" type="reset" class="enabled p-1 border rounded hover:bg-red-300 hover:cursor:hand">🧹</button>
 					</div>
 				</div>
-				{% endif %}
 				<!-- -->
 				<div class="flex gap-2">
 					<!-- user profile -->
@@ -59,10 +57,9 @@
 				<a href="{{url_for('register_user_view')}}"><div class="p-1 border rounded">👥➕add user</div></a>
 				<a href="{{url_for('users_view')}}"><div class="p-1 border rounded">👥view users</div></a>
 				<a href="{{url_for('register_device_view')}}"><div class="p-1 border rounded">🖥➕ add device</div></a>
-				<a href="{{url_for('devices_view')}}"><div class="p-1 border rounded">🖥view devices</div></a>
+				<!-- view devices is rendered moot by the fact that you can already view devices in the main page "/" -->
+				<!-- <a href="{{url_for('devices_view')}}"><div class="p-1 border rounded">🖥view devices</div></a> -->
 			</div>
-
 	</div>
 </body>
-	<script src="{{url_for('static', path='js/search.js')}}"></script>
 </html>

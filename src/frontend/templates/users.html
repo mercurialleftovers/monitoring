@@ -1,21 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% for user in users %}
-	<div class ="userList border rounded p-1 grid sm:grid-cols-2">
-
-		<div class="userCard grid">
-			<!-- name and username + pic -->
-			<div class = "userContainer border rounded p-2 gap-1 flex flex-col w-lg">
-				<div class="flex flex gap-1 items-center">
-					<img class="w-8 h-8" src="{{url_for('static', path='images/profile_pics')}}/{{user.username}}"  alt="{{user.username}}'s profile pic'"/>
-					<span>{{user.firstname}} {{user.lastname}}</span>
-				</div>
-				<span class="text-gray-600">@{{user.username}}</span>
-				<span>{{user.role.value}} @ ADE</span>
-			</div>
-	</div>
-
-	</div>
+<div class ="userList p-1 grid sm:grid-cols-2 gap-2 w-full h-full m-2">
+	{%for role in roles %}
+	<div class="roleContainer  flex flex-col  items-center border rounded gap-2">
+		<h2 class="text-center text-4xl block col-span-2 h-fit">
+			{{emojis[role]}} {{role.value}}S
+		</h2>
+				{% for user in users %}
+					{% if user.role == role %}
+					<div class="userCard flex flex-wrap m-2 bg-blue-300" id="user_{{user.id}}">
+						<!-- name and username + pic -->
+						<div class = "userContainer border rounded p-2 gap-1 flex w-lg">
+							<div class="flex flex gap-1 items-center">
+								<img class="w-24 h-24 rounded-full border p-1 mx-2" src="{{url_for('static', path='images/profile_pics')}}/{{user.username}}"  alt="{{user.username}}'s profile pic'"/>
+							</div>
+							<div class="flex flex-col gap-1">
+								<span class="text-2xl fullname">{{user.firstname}} {{user.lastname}}</span>
+								<span class="text-gray-600 text-xl username">@{{user.username}}</span>
+								<span class="text-xl">{{user.role.value}} @ ADE</span>
+							</div>
+						</div>
+					</div>
+					<!-- end of user card -->
+					{% endif %}
+				{% endfor %}
+		</div>
 	{% endfor %}
+</div>
+<script src="{{url_for('static', path='js/search_users.js')}}"></script>
 {% endblock %}

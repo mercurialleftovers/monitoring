@@ -46,9 +46,11 @@ function toggleSearchBar() {
 
 	console.log(searchDiv);
 
-	if (searchDiv.classList.contains("hidden")) {
-		searchDiv.classList.remove("hidden");
-	} else {
-		searchDiv.classList.add("hidden");
-	}
+	// if (searchDiv.classList.contains("hidden")) {
+	// 	searchDiv.classList.remove("hidden");
+	// } else {
+	// 	searchDiv.classList.add("hidden");
+	// }
+	//
+	searchDiv.classList.toggle("hidden");
 }
