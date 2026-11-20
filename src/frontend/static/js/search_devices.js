@@ -1,5 +1,7 @@
 const searchBar = document.getElementById("searchBar");
 const resetButton = document.getElementById("resetButton");
+document.querySelector("#searchSection").classList.remove("hidden");
+document.querySelector("#searchSection").classList.add("flex");
 
 function updateDeviceList(kw) {
 	const devices = document.querySelectorAll(".deviceContainer");
@@ -42,15 +44,11 @@ if (searchBar) {
 }
 
 function toggleSearchBar() {
+	searchBar.value = "";
+	updateDeviceList("");
 	const searchDiv = document.getElementById("searchDiv");
-
-	console.log(searchDiv);
-
-	// if (searchDiv.classList.contains("hidden")) {
-	// 	searchDiv.classList.remove("hidden");
-	// } else {
-	// 	searchDiv.classList.add("hidden");
-	// }
-	//
 	searchDiv.classList.toggle("hidden");
 }
+
+const searchMagnifier = document.querySelector("#searchMagnifier");
+searchMagnifier.onclick = toggleSearchBar;

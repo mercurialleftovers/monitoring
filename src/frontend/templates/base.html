@@ -14,18 +14,18 @@
 </head>
 <body>
 		<!-- main container -->
-		<div class="flex flex-col h-screen">
+		<div class="flex flex-col h-screen p-2 box-border">
 			<!-- header -->
 			<div class="w-full flex justify-between items-center p-3 border rounded">
 				<!-- title -->
 				<a href="/" class"hover:cursor:hand"><div class="p-1 border rounded flex items-center justify-between gap-1 hover:bg-green-200"><span>👁</span><span class="hidden sm:block">Monitoring</span></div></a>
 				<!-- search tool -->
-				<div class="flex gap-1 items-center grow px-2">
-					<button class="border rounded p-1 hover:bg-green-200 hover:cursor:hand" onclick="toggleSearchBar()">🔍</button>
-
-					<div id="searchDiv" class="flex gap-1 grow">
-						<input id="searchBar" class="p-1 border rounded hover:bg-orange-100 grow" />
-						<button id="resetButton" type="reset" class="enabled p-1 border rounded hover:bg-red-300 hover:cursor:hand">🧹</button>
+				<!-- TODO(bader): only render if current page is home, users or devices -->
+				<div id="searchSection" class="hidden gap-1 items-center grow px-2">
+					<button class="border rounded p-1 hover:bg-green-200 hover:cursor:hand" id="searchMagnifier">🔍</button>
+					<div id="searchDiv" class="flex gap-1 grow border rounded">
+						<input id="searchBar" class="p-1 px-3 hover:bg-orange-100 grow" />
+						<button id="resetButton" type="reset" class="enabled p-1 hover:bg-red-300 hover:cursor:hand">🧹</button>
 					</div>
 				</div>
 				<!-- -->
@@ -47,18 +47,21 @@
 			</div>
 
 			<!-- content -->
-			<section class="flex flex-col grow justify-center items-center bg-orange-100">
+			<section class="flex flex-col grow justify-center items-center overflow-y-scroll">
 				{% block content %}
 				{% endblock%}
 			</section>
 
 			<!-- footer -->
-			<div class="footer p-3 flex justify-around border rounedd">
+			<div class="footer p-3 flex justify-around border rounded">
 				<a href="{{url_for('register_user_view')}}"><div class="p-1 border rounded">👥➕add user</div></a>
 				<a href="{{url_for('users_view')}}"><div class="p-1 border rounded">👥view users</div></a>
 				<a href="{{url_for('register_device_view')}}"><div class="p-1 border rounded">🖥➕ add device</div></a>
 				<!-- view devices is rendered moot by the fact that you can already view devices in the main page "/" -->
 				<!-- <a href="{{url_for('devices_view')}}"><div class="p-1 border rounded">🖥view devices</div></a> -->
+				<!-- <div class="p-1 border rounded flex"><div class="bg-black text-green-400 border px-1 mx-1 font-bold">>-</div>global logs</div> -->
+				<a href="{{url_for('events_view')}}"><div class="p-1 border rounded flex">🧾logs</div></a>
+				
 			</div>
 	</div>
 </body>

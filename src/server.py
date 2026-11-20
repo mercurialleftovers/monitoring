@@ -28,7 +28,7 @@ os.system("clear")
 
 from database import get_db_session
 from enums import DeviceType, Department, Role
-from models import Device, User
+from models import Device, User, Event
 
 # from schemas import DeviceInfo, Sample, UserSchema
 from schemas import DeviceInfo, Sample
@@ -37,6 +37,13 @@ from tools import WSManager
 auth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="continuous monitoring")
 app.mount("/static", StaticFiles(directory="./frontend/static"), name="static")
+role_emojis: dict[Role, str] = {
+    Role.TECHNICIAN: "⚙",
+    Role.ENGINEER: "⚙",
+    Role.SUPERVISOR: "👁",
+    Role.OPERATOR: "🖐",
+    Role.INTERN: "👶",
+}
 
 wsManger = WSManager()
 readings: Queue[Sample] = Queue()
@@ -294,7 +301,8 @@ def add_user_view(req: Request):
         name="create_user.html",
         request=req,
         context={
-            "roles": [role.value for role in Role],
+            "roles": [role for role in Role],
+            "emojis": role_emojis,
             "title": "New User",
         },
     )
@@ -372,14 +380,8 @@ def get_users(
         context={
             "title": "users",
             "users": users,
-            # "roles": [role for role in Role],
             "roles": db_session.execute(select(User.role).distinct()).scalars(),
-            "emojis": {
-                Role.TECHNICIAN: "⚙",
-                Role.ENGINEER: "⚙",
-                Role.SUPERVISOR: "👁",
-                Role.OPERATOR: "🖐",
-            },
+            "emojis": role_emojis,
         },
     )
 
@@ -408,6 +410,27 @@ def render_canvas(req: Request) -> HTMLResponse:
         name="canvas_demo.html",
         context={"title": "Canvas Demo"},
         request=req,
+    )
+
+
+@app.get("/events", name="events_view", include_in_schema=False)
+def render_events_view(
+    req: Request,
+    db_session: Annotated[Session, Depends(get_db_session)],
+):
+    events = db_session.execute(
+        select(Event)
+        .order_by(Event.date.desc)
+        .limit(100)  # TODO(bader): refactor into a constant, or a dotenv entry
+    ).scalars()
+
+    return templates.TemplateResponse(
+        request=req,
+        name="events.html",
+        context={
+            "title": "events",
+            "events": events,
+        },
     )
 
 

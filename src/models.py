@@ -1,4 +1,6 @@
+from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from datetime import datetime
 
 from database import engine
 from enums import *
@@ -33,6 +35,15 @@ class User(Model):
     lastname: Mapped[str] = mapped_column()
     role: Mapped[Role] = mapped_column()
     has_profile_pic: Mapped[bool] = mapped_column(default=False)
+
+
+class Event(Model):
+    __tablename__ = "events"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    event_type: Mapped[EventType] = mapped_column()
+    date: Mapped[datetime] = mapped_column(default=datetime.utcnow())
+    detail: Mapped[str] = mapped_column(String(255))
 
 
 Model.metadata.drop_all(bind=engine)
