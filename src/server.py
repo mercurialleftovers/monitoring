@@ -231,6 +231,7 @@ async def add_device_api(
     tag: Annotated[str, Form()],
     department: Annotated[Department, Form()],
     category: Annotated[DeviceType, Form()],
+    # device image file
     device_image: UploadFile,
 ):
     # checking if username exsits:
@@ -268,15 +269,7 @@ async def add_device_api(
 
     # adding new device to db
     db_session.add(new_device)
-
-    return {
-        "name": name,
-        "tag": tag,
-        "department": department,
-        "category": category,
-        "has_image": device_image_saved,
-    }
-    # return RedirectResponse("/devices")
+    return RedirectResponse("/devices")
 
 
 @app.get("/devices", name="devices_view", include_in_schema=False)
@@ -364,18 +357,7 @@ async def add_user_api(
 
     # adding new user to the database
     db_session.add(new_user)
-    #
-    # return {
-    #     "username": username,
-    #     "firstname": firstname,
-    #     "lastname": lastname,
-    #     "email": email,
-    #     "password": password,
-    #     "function": role,
-    #     "phone": phone,
-    #     "profile_pic": profile_pic,
-    # }
-    # return RedirectResponse("/users")
+    return RedirectResponse("/users")
 
 
 @app.get("/users", name="users_view", include_in_schema=False)
