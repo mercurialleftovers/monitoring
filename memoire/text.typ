@@ -73,6 +73,7 @@
   first-line-indent: 2em,
 )
 
+#set cite(style: "chicago-notes")
 #set heading(numbering: "1.1")
 #show heading: set block(above: 1.5em, below: 1.5em)
 #set page(numbering: "1")
@@ -84,13 +85,95 @@
 
 == maintenance industrielle
 
-AFNOR (Association Française de Normalisation) NF-X defines maintenance as: << l’ensemble des activités ayant pour objectif de maintenir ou rétablir un bien dans un état spécifié de fonctionnement pour établir une fonction requise. >>
+=== definition
+// AFNOR (Association Française de Normalisation) NF-X defines maintenance as: << l’ensemble des activités ayant pour objectif de maintenir ou rétablir un bien dans un état spécifié de fonctionnement pour établir une fonction requise. >>
+// Les objectifs fixés par la direction permettent de mettre en place une stratégie de maintenance (prise en compte des enjeux humains, techniques, de sécurité, financiers, etc…). De cette stratégie découle ensuite les types de maintenance à déployer.
+// La maintenance rassemble donc l’ensemble des actions techniques (prévention, entretien, dépannage, révision et vérification, réparation, contrôle et diagnostic), mais aussi administratives et de management, permettant à une entreprise de conserver le bon fonctionnement des équipements et d’assurer la production.
+La maintenance industrielle se définit comme l’ensemble des actions visant à maintenir ou à rétablir un équipement de production dans un état défini, afin que celui-ci puisse assurer le service prévu. Une politique de maintenance bien menée permet de prévenir un grand nombre de problèmes et de limiter les pertes de productivité.
+Elle implique plusieurs choses : une inspection régulière des installations, la collecte et l’analyse de données précises sur l’état des infrastructures et des machines, et bien sûr les interventions sur le terrain. Pour le pilotage, de nombreuses entreprises s’appuient sur des solutions technologiques spécialisées. Ces outils mesurent en continu les indicateurs clés et alertent dès qu’un système approche d’une zone critique. Mais l’essentiel se passe sur le terrain : le technicien de maintenance industrielle se déplace pour inspecter, contrôler et réparer.
 
-Les objectifs fixés par la direction permettent de mettre en place une stratégie de maintenance (prise en compte des enjeux humains, techniques, de sécurité, financiers, etc…). De cette stratégie découle ensuite les types de maintenance à déployer.
+Les interventions vont de la plus simple (changement d’une ampoule, graissage d’un mécanisme) à la plus complexe (remplacement d’un automate, intervention sur une ligne robotisée, redémarrage d’une production après panne majeure). Plus l’intervention est spécifique, plus la qualification du technicien doit être élevée. Les enjeux de sécurité sont également majeurs : un technicien doit travailler avec précision et rapidité tout en garantissant sa propre sécurité et celle de l’équipe de production.
 
+=== les trois famillies de maintenance industrielle
 
+==== preventive
+La maintenance préventive vise à réduire les défaillances et la dégradation des composants en intervenant avant qu’une panne ne survienne. Elle peut être systématique (à intervalles de temps définis) ou conditionnelle (déclenchée sur la base d’un seuil mesuré). Concrètement, elle inclut les inspections périodiques, le remplacement programmé de pièces d’usure, la lubrification, les contrôles d’étanchéité, etc.
 
-La maintenance rassemble donc l’ensemble des actions techniques (prévention, entretien, dépannage, révision et vérification, réparation, contrôle et diagnostic), mais aussi administratives et de management, permettant à une entreprise de conserver le bon fonctionnement des équipements et d’assurer la production.
+Avec la digitalisation des usines, la maintenance préventive devient de plus en plus pilotée par la donnée. L’équipe technique s’appuie typiquement sur une GMAO (Gestion de la Maintenance Assistée par Ordinateur) pour planifier et suivre les opérations sur l’ensemble du parc machines.
+==== predictive
+La maintenance prédictive va un cran plus loin que la préventive. Elle s’appuie sur des capteurs IoT, du traitement de données et de l’intelligence artificielle pour prédire les pannes avant qu’elles ne se produisent. Le technicien intervient alors juste à temps, ni trop tôt (gaspillage), ni trop tard (panne).
+
+C’est l’une des briques majeures de l’industrie 4.0. Les bénéfices sont considérables : réduction des arrêts de production non planifiés, optimisation de la durée de vie des équipements, baisse significative des coûts de maintenance. Mais elle requiert un investissement en capteurs, en plateforme de données et en compétences (data, automatismes, métier)
+==== corrective/curative
+La maintenance corrective, parfois appelée maintenance curative, regroupe l’ensemble des activités menées après la défaillance d’un équipement, pour le remettre en état de fonctionner. C’est l’image la plus connue du métier : un technicien qui intervient en urgence sur une machine arrêtée pour rétablir la production au plus vite.
+
+Elle peut être palliative (réparation provisoire pour permettre la reprise rapide de la production) ou curative (réparation définitive pour rétablir l’état nominal de l’équipement). Pour être efficace, elle doit toujours être suivie d’une phase de tests pour vérifier le bon fonctionnement et éviter les rechutes.
+
+À noter : une stratégie de maintenance qui repose majoritairement sur du correctif est aujourd’hui considérée comme une stratégie en retard. Les entreprises performantes visent un mix où la corrective ne représente que 20 à 30% de l’activité globale.
+
+=== Evolution et transformation du secteur (digitalisation, IA, IoT etc)
+C’est probablement le secteur de l’industrie qui se transforme le plus vite en 2026. Plusieurs grandes tendances structurent la pratique aujourd’hui.
+
+L’IoT industriel et la maintenance prédictive
+Les capteurs connectés se généralisent dans les usines et collectent en continu des données de fonctionnement (vibrations, température, courant, pression). Ces données alimentent des algorithmes qui détectent les signaux faibles annonciateurs de panne avant que celle-ci ne se produise. Les industriels les plus avancés affichent des taux de pannes non planifiées divisés par 3 à 5 grâce à cette approche. C’est probablement le levier de productivité industrielle le plus rentable du moment.
+
+==== L’IA appliquée à la maintenance
+L’intelligence artificielle générative s’invite dans le quotidien : génération de rapports d’intervention, aide au diagnostic, recherche dans les manuels constructeurs, formation des techniciens, automatisation de la GMAO. Les outils comme ChatGPT ou Copilot permettent à un technicien d’accéder en quelques secondes à des informations qui demandaient auparavant des heures de recherche. Les profils qui s’approprient ces outils en 2026 prennent une avance significative.
+
+- Le jumeau numérique
+Le jumeau numérique (digital twin) consiste à créer une copie virtuelle d’un équipement ou d’une ligne de production, mise à jour en temps réel grâce aux capteurs. On peut alors simuler des scénarios, tester des interventions sans interrompre la production, et optimiser les paramètres machine. Les bénéfices sont énormes en formation, en diagnostic et en planification d’interventions.
+
+- La réalité augmentée pour les techniciens
+La réalité augmentée se démocratise dans les usines. Un technicien équipé de lunettes connectées (ou simplement d’un smartphone) peut visualiser des informations contextuelles sur les équipements, suivre des procédures pas à pas en surimpression, ou être assisté à distance par un expert qui voit ce qu’il voit. C’est particulièrement efficace pour la maintenance complexe et pour la montée en compétence des techniciens juniors.
+
+- La GMAO en mode SaaS
+Les solutions GMAO ont massivement migré vers le cloud sur les 5 dernières années. Les entreprises s’équipent désormais beaucoup plus rapidement, avec des solutions accessibles depuis n’importe quel terminal mobile, intégrant nativement IoT, IA et reporting avancé. Le déploiement est simplifié, les coûts sont étalés et les mises à jour automatiques.
+
+- La pénurie chronique de profils qualifiés
+Toutes ces transformations technologiques se heurtent à une réalité de marché : les profils maintenance qualifiés sont rares et de plus en plus difficiles à recruter. La pyramide des âges (départs en retraite massifs des techniciens formés dans les années 80–90), la désaffection des jeunes pour les filières industrielles et l’explosion de la demande (gigafactories, batteries, hydrogène) créent une tension durable. Les salaires montent de 6 à 10% par an depuis 2022 et les délais de recrutement s’allongent.
+
+=== Les 5 niveaux de maintenance industrielle (norme AFNOR)
+
+La norme française NF X 60–000 définit cinq niveaux de maintenance, classés par ordre croissant de complexité et de qualification requise :
+
+- *Niveau 1* : actions simples réalisables par l’opérateur lui-même (lecture d’indicateurs, échange de consommables, nettoyage)
+- *Niveau 2* : actions de dépannage simple effectuées par un technicien qualifié sur place (contrôles, échanges standard, réglages)
+- *Niveau 3* : actions plus complexes nécessitant un diagnostic, l’utilisation de procédures spécifiques et parfois un appui à distance
+- *Niveau 4* : actions de maintenance lourde, généralement préventives ou correctives, faisant intervenir un personnel spécialisé avec un outillage spécifique (interventions en atelier, expertises)
+- *Niveau 5* : opérations majeures ou rénovations confiées au constructeur ou à un atelier central spécialisé
+Cette classification est très utile pour structurer une politique de maintenance et clarifier qui fait quoi entre les opérateurs production, les techniciens internes et les prestataires externes. C’est aussi un cadre que tout responsable maintenance doit maîtriser pour piloter son activité.
+
+=== les buts de maintenance industrielle
+La maintenance ne sert pas qu’à éviter les pannes. Elle remplit plusieurs missions stratégiques pour l’entreprise.
+Elle garantit la disponibilité des équipements, ce qui se traduit directement par une meilleure capacité à honorer les commandes clients et à respecter les engagements de délai. Elle optimise la durée de vie des machines, ce qui retarde les investissements de renouvellement et améliore le retour sur investissement industriel. Elle sécurise les installations et les opérateurs, en limitant les risques d’accident liés à un équipement défaillant. Elle améliore la qualité produit, parce qu’une machine bien entretenue produit mieux. Et elle réduit les coûts d’exploitation sur le long terme, même si elle demande un investissement initial.
+Pour piloter tout cela, on utilise un ensemble de KPI dédiés (MTBF, MTTR, taux de disponibilité, TRG…) et de méthodes structurantes comme la TPM (Total Productive Maintenance) qui s’inscrit dans la philosophie lean manufacturing.
+
+=== Les spécialisations techniques de la maintenance
+La maintenance industrielle regroupe plusieurs spécialités, qu’un même technicien ne maîtrise généralement pas toutes. Les principales sont :
+
+- *Mécanique* : la dimension la plus connue, elle traite des éléments mécaniques (transmissions, roulements, soudage, pièces tournantes)
+- *Électrotechnique* : l’électricité appliquée à l’industrie et à la logistique
+- *Automatisme* : maîtrise des automates programmables industriels (Siemens, Schneider, Rockwell, etc.)
+- *Informatique industrielle* : informatique appliquée à la production (MES, SCADA, supervision) – Hydraulique : propriétés mécaniques des liquides et fluides sous pression
+- *Pneumatique* : science des gaz et des systèmes pneumatiques
+- *CVC* : chauffage, ventilation, climatisation
+- *Électronique* : intervention sur les circuits et cartes électroniques
+- *Robotique* : maintenance des robots industriels et des cobots
+
+Ces compétences s’acquièrent via une formation type BTS maintenance industrielle, un titre professionnel reconnu par l’État ou une formation spécialisée en maintenance industrielle.
+
+=== Les métiers de la maintenance industrielle
+La fonction maintenance regroupe une vraie diversité de métiers, accessibles à différents niveaux de formation.
+
+- *Responsable maintenance industrielle *: pilote l’équipe et la stratégie maintenance d’un site
+- *Technicien de maintenance industrielle * : cœur opérationnel du métier Agent de maintenance : poste d’entrée, profil terrain
+- *Automaticien *: spécialiste des automates et systèmes automatisés
+- *Roboticien *: spécialiste des robots et cobots, métier en très forte croissance
+- *Régleur *: règle les machines de production en début de série
+- *Ingénieur méthodes maintenance *: structure les processus, déploie la GMAO et la TPM
+- *Ingénieur maintenance *: pilote les projets et les équipes techniques sur des périmètres complexes
+- *Metteur au point *: intervient sur la mise en service initiale d’équipements
+- *Technicien SAV *: maintenance chez les clients pour le compte d’un fabricant ou prestataire
 
 
 == intro ADE
