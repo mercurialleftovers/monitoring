@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from fastapi import UploadFile
 
 from enums import *
 
@@ -26,5 +27,25 @@ class User(BaseModel):
     username: str
     email: str
     firstname: str
+    role: Role
+    lastname: str
+
+
+class UserCreateRequest(BaseModel):
+    username: str
+    password: str
+    email: str
+    phone: str
+    firstname: str
     lastname: str
     role: Role
+    profile_picture: UploadFile | None = None
+
+
+class UserCreateResponse(BaseModel):
+    username: str
+    email: str
+    firstname: str
+    role: Role
+    lastname: str
+    has_profile_pic: bool = False

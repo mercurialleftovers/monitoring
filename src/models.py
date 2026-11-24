@@ -4,6 +4,7 @@ from datetime import datetime
 
 from database import engine
 from enums import *
+from constants import DIRS
 
 
 class Model(DeclarativeBase):
@@ -13,14 +14,12 @@ class Model(DeclarativeBase):
 class Device(Model):
     __tablename__ = "devices"
 
-    id: Mapped[int] = mapped_column(primary_key=True)  # user readable name
-    name: Mapped[str] = mapped_column()  # user readable name
-    tag: Mapped[str] = mapped_column(
-        unique=True
-    )  # the unique id that is entered at the level of the MC
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column()
+    tag: Mapped[str] = mapped_column(unique=True)
     category: Mapped[DeviceType] = mapped_column()
     department: Mapped[Department] = mapped_column()
-    has_image: Mapped[bool] = mapped_column(default=False)
+    device_image: Mapped[str | None] = mapped_column(default=None)
 
 
 class User(Model):
@@ -34,7 +33,14 @@ class User(Model):
     firstname: Mapped[str] = mapped_column()
     lastname: Mapped[str] = mapped_column()
     role: Mapped[Role] = mapped_column()
-    has_profile_pic: Mapped[bool] = mapped_column(default=False)
+    profile_picture: Mapped[str | None] = mapped_column(default=None)
+
+    # @property
+    # def image_path(self) -> str:
+    #     if self.profile_picture:
+    #         return f"{DIRS.user_profile_pictures}/{self.profile_picture}"
+    #
+    #     return f"{DIRS.default_pictures}/user.svg"
 
 
 class Event(Model):

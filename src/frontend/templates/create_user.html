@@ -4,37 +4,38 @@
 
 <form action="{{url_for('register_user_api')}}" method="post" enctype="multipart/form-data" class="border rounded p-8 m-4 grid sm:grid-cols-2 items-center justify-center gap-4">
 	<label for="username">🔗username</label>
-	<input name="username"  class="border rounded"/>
+	<input name="username"  class="px-2 border rounded"/>
 
 	<label for="password">🔑password</label>
-	<input name="password"  type="password" class="border rounded"/>
+	<input name="password"  type="password" class="px-2 border rounded"/>
 
 	<label for="lastname">👤lastname</label>
-	<input name="lastname"  class="border rounded"/>
+	<input name="lastname"  class="px-2 border rounded"/>
 
 	<label for="firstname">👤firstname</label>
-	<input name="firstname"  class="border rounded"/>
+	<input name="firstname"  class="px-2 border rounded"/>
 
 	<label for="phone">📞phone</label>
-	<input name="phone"  class="border rounded"/>
+	<input name="phone"  class="px-2 border rounded"/>
 
 	<label for="email">✉email</label>
-	<input name="email"  class="border rounded"/>
+	<input name="email"  class="px-2 border rounded"/>
 
 	<label for="role">🛠role</label>
 	<select name="role" class="border rounded p-1">
 		{% for role in roles %}
-		<option value="{{role}}">{{emojis[role]}}{{role.value}}</option>
+		<option value="{{role.value}}">{{emojis[role]}}{{role.value}}</option>
 		{% endfor %}
 	</select>
 
 	<div class="col-span-2 flex flex-col items-center border rounded p-2 gap-2">
-		<input name="profile_pic" type="file" accept="image/*" value="choose a picture" class="border border-black rounded p-1 hover:bg-orange-200 hover:text-orange-200 hover:mouse:hand h-40 w-40 text-white" style="background-image: url({{url_for('static', path='images/default/user.svg')}})"/>
-		<div class="border rounded p-2 hover:bg-green-200 w-full text-center">📷 image here</div>
+		<input name="profile_picture" type="file" accept="image/*" value="choose a picture" class="border border-black rounded p-1 hover:bg-orange-200 hover:text-orange-200 hover:mouse:hand h-40 w-40 text-white bg-contain" style="background-image: url({{url_for('static', path='images/default/user.svg')}})"/>
+		<div class="selectFileButton border rounded p-2 hover:bg-green-200 hover:mouse:pointer w-full text-center">📷 image here</div>
 	</div>
 
 	<input type="submit" value="💾register" class="border rounded p-1 bg-blue-200 col-span-2"/>
 </form>
+<script src="{{url_for('static', path='js/form.js')}}"></script>
 
 {% endblock %}
 

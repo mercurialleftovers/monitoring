@@ -31,8 +31,14 @@ from enums import DeviceType, Department, Role
 from models import Device, User, Event
 
 # from schemas import DeviceInfo, Sample, UserSchema
-from schemas import DeviceInfo, Sample
+from schemas import DeviceInfo, Sample, UserCreateRequest, UserCreateResponse
 from tools import WSManager
+from constants import (
+    DIRS,
+)
+
+DEBUG: bool = False
+
 
 auth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="continuous monitoring")
@@ -103,7 +109,7 @@ def device_handshake(
     return device.id
 
 
-@app.post("/sample/submit")
+@app.post("/sample/submit", tags=["data"])
 async def receive_sample(sample: Sample):
     # TODO(bader): instead of adding a datum to the quque, sendi t directly through ws
     for ws_connection in wsManger.active_connections:
@@ -115,7 +121,7 @@ async def receive_sample(sample: Sample):
     return {"status": "ok"}  # TODO(bader): what is the practice here ?
 
 
-@app.post("/ap1/device/register", name="register_device_api_1")
+@app.post("/ap1/device/register", name="register_device_api_1", tags=["devices"])
 def register_device(
     # device: DeviceInfo,
     device: Annotated[DeviceInfo, Form()],
@@ -142,7 +148,12 @@ def register_device(
     return device
 
 
-@app.get("/device/register", name="register_device_view", include_in_schema=False)
+@app.get(
+    "/device/register",
+    name="register_device_view",
+    tags=["devices"],
+    include_in_schema=False,
+)
 def register_device_view(req: Request):
     return templates.TemplateResponse(
         name="register_device.html",
@@ -155,7 +166,7 @@ def register_device_view(req: Request):
     )
 
 
-@app.post("/device/info")
+@app.post("/device/info", tags=["devices"])
 def get_device_info(tag: str, db_session: Annotated[Session, Depends(get_db_session)]):
     deviceInDb: Device | None = (
         db_session.execute(select(Device).where(Device.tag == tag))
@@ -170,7 +181,7 @@ def get_device_info(tag: str, db_session: Annotated[Session, Depends(get_db_sess
     return DeviceInfo.from_orm(deviceInDb)
 
 
-@app.post("/device/byid")
+@app.post("/device/byid", tags=["devices"])
 def get_device_by_id(
     id: int,
     db_session: Annotated[Session, Depends(get_db_session)],
@@ -186,14 +197,14 @@ def get_device_by_id(
     return device
 
 
-@app.get("/device/all")
+@app.get("/device/all", tags=["devices"])
 def get_all_devices(
     db_session: Annotated[Session, Depends(get_db_session)],
 ):
     return db_session.execute(select(Device)).scalars().all()
 
 
-@app.get("/device/control/{{id}}", include_in_schema=False)
+@app.get("/device/control/{{id}}", include_in_schema=False, tags=["devices"])
 def setup_device(
     db_session: Annotated[Session, Depends(get_db_session)],
     id: int,
@@ -224,7 +235,7 @@ def setup_device(
     "/device/register",
     name="register_device_api",
     tags=[
-        "device management",
+        "device",
     ],
 )
 async def add_device_api(
@@ -276,7 +287,7 @@ async def add_device_api(
     return RedirectResponse("/devices")
 
 
-@app.get("/devices", name="devices_view", include_in_schema=False)
+@app.get("/devices", name="devices_view", include_in_schema=False, tags=["devices"])
 def get_devices(
     req: Request,
     db_session: Annotated[Session, Depends(get_db_session)],
@@ -292,7 +303,9 @@ def get_devices(
     )
 
 
-@app.get("/user/register", name="register_user_view", include_in_schema=False)
+@app.get(
+    "/user/register", name="register_user_view", include_in_schema=False, tags=["users"]
+)
 def add_user_view(req: Request):
     return templates.TemplateResponse(
         name="create_user.html",
@@ -305,64 +318,63 @@ def add_user_view(req: Request):
     )
 
 
-@app.post(
-    "/user/register",
-    name="register_user_api",
-    tags=[
-        "user management",
-    ],
-)
-# def add_user_api(user: Annotated[User, Form()]):
-async def add_user_api(
-    req: Request,
+@app.post("/user/register", name="register_user_api", tags=["users"])
+def add_user(
+    userRequst: Annotated[UserCreateRequest, Form()],
     db_session: Annotated[Session, Depends(get_db_session)],
-    # user fields
-    username: Annotated[str, Form()],
-    firstname: Annotated[str, Form()],
-    lastname: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    email: Annotated[str, Form()],
-    phone: Annotated[str, Form()],
-    role: Annotated[Role, Form()],
-    profile_pic: UploadFile,
 ):
-    # checking if username exsits:
-    user_in_db: User | None = db_session.execute(
-        select(User).where(User.username == username)
-    ).scalar_one_or_none()
 
-    if user_in_db:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=f"user {username} already exists",
-        )
-
-    # TODO(bader): img file validation: extension + size
-    profile_pic_saved: bool = False
-    if profile_pic:
-        profile_pic_path: str = f"frontend/static/images/profile_pics/{username}"
-        print(profile_pic_path)
-
-        with open(profile_pic_path, "wb") as user_profile_pic:
-            user_profile_pic.write(profile_pic.file.read())
-            profile_pic_saved = True
-
-    # TODO(bader): prbably email uniqueness is verified by sqlalachemy
-
-    new_user: User = User(
-        username=username,
-        firstname=firstname,
-        lastname=lastname,
-        password=password,
-        email=email,
-        phone=phone,
-        role=role,
-        has_profile_pic=profile_pic_saved,
+    # creating the user, initially w/o a profile_picture
+    new_user = User(
+        username=userRequst.username,
+        password=userRequst.password,
+        email=userRequst.email,
+        phone=userRequst.phone,
+        firstname=userRequst.firstname,
+        lastname=userRequst.lastname,
+        role=userRequst.role,
     )
 
-    # adding new user to the database
+    user_profile_pic_filename: str | None = None
+
+    if userRequst.profile_picture:
+        image_filename: str | None = (
+            userRequst.profile_picture.filename
+        )  # NOTE(bader): how is it supposed to be None if profile_picture exists ?
+
+        if DEBUG:
+            print(userRequst.model_dump())
+            from PIL import Image
+
+            profile_picture = Image.open(userRequst.profile_picture.file)
+            profile_picture.show()
+            # print(f"result of opening: {result}")
+            return
+
+        if image_filename:
+            # TODO(bader): profile pictures should be (username).(ext)
+            # regex ought to do it
+            import re
+
+            raw_regex: str = r"(.+)\.([\w|\d]{3,8})$"  # filename . extension
+            regex = re.compile(raw_regex)
+            matched = regex.search(image_filename)
+            if matched:
+                _, extension = matched.group(1, 2)  # _ is the filename as uploaded
+                user_profile_pic_filename = f"{userRequst.username}.{extension}"
+                # saving image file to static storage:
+                with open(
+                    f"{DIRS.user_profile_pictures}/{user_profile_pic_filename}",
+                    "wb",
+                ) as new_profile_image:
+                    new_profile_image.write(userRequst.profile_picture.file.read())
+
+    if user_profile_pic_filename:
+        new_user.profile_picture = user_profile_pic_filename
+
     db_session.add(new_user)
-    return RedirectResponse("/users")
+
+    return UserCreateResponse(**userRequst.model_dump())
 
 
 @app.get("/users", name="users_view", include_in_schema=False)
@@ -418,7 +430,9 @@ def render_events_view(
     events = db_session.execute(
         select(Event)
         .order_by(Event.date.desc)
-        .limit(100)  # TODO(bader): refactor into a constant, or a dotenv entry
+        .limit(
+            100
+        )  # TODO(bader): refactor into a constant, or a dotenv entry, maybe even an admin table (admin dashboard)
     ).scalars()
 
     return templates.TemplateResponse(
