@@ -53,15 +53,14 @@
 			</section>
 
 			<!-- footer -->
-			<div class="footer p-3 flex justify-around border rounded">
-				<a href="{{url_for('register_user_view')}}"><div class="p-1 border rounded">👥➕add user</div></a>
-				<a href="{{url_for('users_view')}}"><div class="p-1 border rounded">👥view users</div></a>
-				<a href="{{url_for('register_device_view')}}"><div class="p-1 border rounded">🖥➕ add device</div></a>
+			<div class="footer p-3 grid grid-cols-2 sm:grid-cols-4 gap-2 border rounded">
+				<a href="{{url_for('register_user_view')}}"><div class="p-1 border rounded text-center">👥➕add user</div></a>
+				<a href="{{url_for('users_view')}}"><div class="p-1 border rounded text-center">👥view users</div></a>
+				<a href="{{url_for('register_device_view')}}"><div class="p-1 border rounded text-center">🖥➕ add device</div></a>
 				<!-- view devices is rendered moot by the fact that you can already view devices in the main page "/" -->
 				<!-- <a href="{{url_for('devices_view')}}"><div class="p-1 border rounded">🖥view devices</div></a> -->
 				<!-- <div class="p-1 border rounded flex"><div class="bg-black text-green-400 border px-1 mx-1 font-bold">>-</div>global logs</div> -->
-				<a href="{{url_for('events_view')}}"><div class="p-1 border rounded flex">🧾logs</div></a>
-				
+				<a href="{{url_for('events_view')}}"><div class="p-1 border rounded text-center">🧾history</div></a>
 			</div>
 	</div>
 </body>

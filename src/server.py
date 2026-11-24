@@ -51,12 +51,9 @@ currentId: int = 0
 
 templates = Jinja2Templates(directory="./frontend/templates")
 
-
-def RequestLogger(req: Request):
-    print(req)
-
-
-# app.mount("/", RequestLogger)
+# TODO(bader): logging
+# TODO(bader): uv init and reordering project files
+# TODO(bader): dockerization (delivery)
 
 
 @app.get("/", name="home", include_in_schema=False)
@@ -444,3 +441,93 @@ async def manage_websockets(ws: WebSocket):
         except WebSocketDisconnect:
             await wsManger.disconnect(ws)
             return
+
+
+# --- testing stuff NOTE(bader): non-production stuff
+from pydantic import BaseModel
+
+
+class DataModel(BaseModel):
+    username: str
+    pasword: str
+    email: str
+    image: UploadFile
+
+
+@app.get("/test", include_in_schema=False)
+def receive_files_and_data_view(req: Request):
+    return templates.TemplateResponse(
+        name="form_with_files.html",
+        request=req,
+        context={"title": "a form with a file"},
+    )
+
+
+@app.post("/files_n_data")
+def receive_files_and_data(data: Annotated[DataModel, Form()], file_: UploadFile):
+    return {"data": data, "file": file_}
+
+
+from faker import Faker
+
+my_faker = Faker()
+import random
+
+
+@app.get("/populate_db/{num_users}/{num_devices}")
+async def populate(
+    num_users: int,
+    num_devices: int,
+    db_session: Annotated[Session, Depends(get_db_session)],
+):
+    for i in range(num_users):
+        first_name = random.choice(
+            [
+                my_faker.first_name(),
+                my_faker.first_name(),
+            ]
+        )
+        last_name = random.choice(
+            [
+                my_faker.last_name(),
+                my_faker.last_name(),
+            ]
+        )
+        username = my_faker.user_name()
+        role = random.choice(list(Role))
+        email = my_faker.email()
+        phone = my_faker.phone_number()
+        password = my_faker.password()
+
+        db_session.add(
+            User(
+                username=username,
+                password=password,
+                lastname=last_name,
+                firstname=first_name,
+                email=email,
+                phone=phone,
+                role=role,
+            )
+        )
+
+    for i in range(num_devices):
+        prefix = random.choice(
+            [
+                my_faker.first_name(),
+                my_faker.first_name(),
+            ]
+        )
+        category = random.choice(list(DeviceType))
+        department = random.choice(list(Department))
+        tag = f"category_{prefix} {i}"
+        name = f"{prefix} {i} {category.value} {department.value}"
+
+        db_session.add(
+            Device(
+                name=name,
+                category=category,
+                tag=tag,
+                department=department,
+            )
+        )

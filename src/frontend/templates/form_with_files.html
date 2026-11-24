@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="/files_n_data" method="POST" enctype="multipart/form-data" class="p-2 rounded border grid gap-2">
+	<input type="text" class="border rounded p-1" name="username">
+	<input type="text" class="border rounded p-1" name="password">
+	<input type="text" class="border rounded p-1" name="email">
+
+	<input type="file" name="image" class="p-1 rounded border">
+	<input type="submit" value="register">
+</form>
+{% endblock %}

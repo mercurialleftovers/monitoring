@@ -1,32 +1,33 @@
 const searchBar = document.getElementById("searchBar");
 const resetButton = document.getElementById("resetButton");
+
 document.querySelector("#searchSection").classList.remove("hidden");
 document.querySelector("#searchSection").classList.add("flex");
 
 function updateDeviceList(kw) {
-	const devices = document.querySelectorAll(".deviceContainer");
+	const users = document.querySelectorAll(window.parentContainerClassName);
 
 	if (kw === "") {
-		for (const device of devices) device.classList.remove("hidden");
+		for (const user of users) user.classList.remove("hidden");
 	}
 
 	const regex = new RegExp(`.*${kw}.*`);
 
-	for (const device of devices) {
-		let deviceName = device.querySelector(".deviceName");
-		let deviceTag = device.querySelector(".deviceTag");
+	for (const user of users) {
+		let userFullName = user.querySelector(window.primarySearchClass);
+		let userUsername = user.querySelector(window.secondarySearchClass);
 
-		if (!deviceName || !deviceTag) {
+		if (!userFullName || !userUsername) {
 			return;
 		}
 
-		deviceName = deviceName.textContent;
-		deviceTag = deviceTag.textContent;
+		userFullName = userFullName.textContent;
+		userUsername = userUsername.textContent;
 
-		if (regex.test(deviceName) || regex.test(deviceTag)) {
-			device.classList.remove("hidden");
+		if (regex.test(userFullName) || regex.test(userUsername)) {
+			user.classList.remove("hidden");
 		} else {
-			device.classList.add("hidden");
+			user.classList.add("hidden");
 		}
 	}
 }

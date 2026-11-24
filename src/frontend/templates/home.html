@@ -1,80 +1,86 @@
-	{% extends "base.html" %}
+{% extends "base.html" %}
+{% block content %}
+	<!-- if devices exist in db -->
+	{% if devices | length > 0 %}
+		<!-- <div id="devices" class="bg-orange-200 w-full h-full"> -->
+		<div id="devices" class="w-full h-full">
+			{%for category in categories %}
+			<div class="category {{category}}">
+					<h2 class="categoryHeader text-center text-2xl mb-8">{{category.value}}S</h2>
+					<div class="categoryContainer grid md:grid-cols-2 md:gap-4 sm:grid-cols-1 sm:items-center">
+							{% for device in devices %}
+								{% if device.category == category %}
 
-	{% block content %}
-		<!-- if no device is present -->
-		{% if devices | length > 0 %}
-		  <div id="devices">
-			  {%for category in categories %}
-				<div class="category {{category}}">
-						<h2 class="categoryHeader text-center text-2xl mb-8">{{category.value}}S</h2>
-						<div class="categoryContainer grid md:grid-cols-2 md:gap-4 sm:grid-cols-1 sm:items-center">
-								{% for device in devices %}
-									{% if device.category == category %}
+									<div id="device_{{device.id}}" class="deviceContainer grid grid-cols-2 border rounded mb-8">
 
-										<div id="device_{{device.id}}" class="deviceContainer grid grid-cols-2 border rounded mb-8">
+										<div class="deviceIdCard  flex flex-col justify-between border p-2 m-2 col-span-2">
+											<div class="text-nowrap">
+												<span>⚙ </span>
+												<span class="name">{{device.name}}</span>
+											</div>
+											<div class="deviceTag text-gray-600 hover:text-blue-600 transition-colors">@{{device.tag}}</div>	
+											<diV>✅:ON</div>	
+										</div>
 
-											<div class="deviceIdCard  flex  flex-col justify-between border p-2 m-2 col-span-2 md:col-span-1">
-												<div class="text-nowrap">
-													<span>⚙ </span>
-													<span class="deviceName">{{device.deviceName}}</span>
-												</div>
-												<div class="deviceTag text-gray-600 hover:text-blue-600 transition-colors">@{{device.tag}}</div>	
+										<!-- device image -->
+										<diV class="border rounded m-2 p-1 col-span-2 h-32 flex justify-center">
+												<div class="h-full border">device img</div>
+										</div>	
+
+										<!-- information -->
+										<div class="border rounded m-2 p-2">department</div>
+										<div class="border rounded m-2 p-2">{{device.department.value}}</div>
+
+										<div class="border rounded m-2 p-2">category</div>
+										<div class="border rounded m-2 p-2">{{device.category.value}}</div>
+
+										<!-- sensor real-time data -->
+										<div class="border rounded m-2 p-2 ">🌡temperature</div>
+										<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_temperature" class="font-mono">[temp C^0]</span>C</div>
+										<div class="border rounded m-2 p-2">📳vibration</div>
+										<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_vibration" class="font-mono">[vib]</span>mm/ms</div>
+
+										<!-- tools -->
+										<div class="border rounded m-2 p-2">⚙ settings</div>
+										<div class="border rounded m-2 p-2">⚙ more</div>
+										<div class="border rounded m-2 p-2 col-span-2">
+											<div>👻 reference</div>
+											<div class="deviceIdCard  flex  flex-col justify-between border p-2 m-2">
+												<div class="text-nowrap">⚙ {{device.deviceName}}</div>	
+												<div class="text-gray-600 hover:text-blue-600 transition-colors">@{{device.identifier}}</div>	
 												<diV>✅:ON</div>	
 											</div>
-
-											<!-- device image -->
-											<diV class="border rounded m-2 p-2 col-span-2 md:col-span-1">device_img</div>	
-
-											<!-- information -->
-											<div class="border rounded m-2 p-2">department</div>
-											<div class="border rounded m-2 p-2">{{device.department.value}}</div>
-
-											<div class="border rounded m-2 p-2">category</div>
-											<div class="border rounded m-2 p-2">{{device.category.value}}</div>
-
-											<!-- sensor real-time data -->
-											<div class="border rounded m-2 p-2 ">🌡temperature</div>
-											<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_temperature" class="font-mono">[temp C^0]</span>C</div>
-											<div class="border rounded m-2 p-2">📳vibration</div>
-											<div class="border rounded m-2 p-2 flex justify-between"><span id="device_{{device.id}}_vibration" class="font-mono">[vib]</span>mm/ms</div>
-
-											<!-- tools -->
-											<div class="border rounded m-2 p-2">⚙ settings</div>
-											<div class="border rounded m-2 p-2">⚙ more</div>
-											<div class="border rounded m-2 p-2 col-span-2">
-												<div>👻 reference</div>
-												<div class="deviceIdCard  flex  flex-col justify-between border p-2 m-2">
-													<div class="text-nowrap">⚙ {{device.deviceName}}</div>	
-													<div class="text-gray-600 hover:text-blue-600 transition-colors">@{{device.identifier}}</div>	
-													<diV>✅:ON</div>	
-												</div>
-											</div>
-											<!-- graphs -->
-											<!-- <div class="p-2 m-2 border rounded text-2xl col-span-2 flex justify-between items-center gap-1"> -->
-											<div class="p-2 m-2 border rounded text-2xl col-span-2 grid grid-cols-1 sm:grid-cols-2 items-center gap-1">
-												<div class="border">
-													<canvas id=`vibration_{device.id}` width=200></canvas>
-												</div>
-												<div class="border">
-													<canvas id=`temperature_{device.id}` width="200"></canvas>
-												</div>
-											</div>
-											<!-- ========= -->
 										</div>
-									{%endif%}
-							{%endfor%}
-					</div>
-				  </div>
-			  {%endfor%}
-		  </div>
-
-
+										<!-- graphs -->
+										<!-- <div class="p-2 m-2 border rounded text-2xl col-span-2 flex justify-between items-center gap-1"> -->
+										<div class="p-2 m-2 border rounded text-2xl col-span-2 grid grid-cols-1 sm:grid-cols-2 items-center gap-1">
+											<div class="border">
+												<canvas id=`vibration_{device.id}` width=200></canvas>
+											</div>
+											<div class="border">
+												<canvas id=`temperature_{device.id}` width="200"></canvas>
+											</div>
+										</div>
+										<!-- ========= -->
+									</div>
+								{%endif%}
+						{%endfor%}
+				</div>
+				</div>
+			{%endfor%}
+		</div>
 	<!-- else no device is present -->
 	{% else %}
 		<div class="text-2xl flex justify-around items-center grow">🙂 there are no devices yet.</div>
 	{% endif %}
 
-	<script src="{{url_for('static', path='js/search_devices.js')}}"></script>
-	<script src="{{url_for('static', path='js/chart.js')}}"></script>
-	<script src="static\js\main.js"></script>
+<script>
+	// search criteria needed by search.js, such as where to find the primary search trait, the secondary one etc
+	window.parentContainerClassName = ".deviceContainer";
+	window.primarySearchClass = ".name";
+	window.secondarySearchClass = ".deviceTag";
+</script>
+<script src="{{url_for('static', path='js/search.js')}}"></script>
+<script src="{{url_for('static', path='js/chart.js')}}"></script>
+<script src="static\js\main.js"></script>
 {% endblock %}

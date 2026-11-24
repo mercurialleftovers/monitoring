@@ -9,9 +9,9 @@
 		</h2>
 				{% for user in users %}
 					{% if user.role == role %}
-					<div class="userCard flex flex-wrap m-2 bg-blue-300" id="user_{{user.id}}">
+					<div class="userCard flex flex-wrap p-2 w-full" id="user_{{user.id}}">
 						<!-- name and username + pic -->
-						<div class = "userContainer border rounded p-2 gap-1 flex w-lg">
+						<div class = "userContainer border rounded p-2 gap-1 flex w-full">
 							<div class="flex gap-1 items-center">
 								<img class="w-24 h-24 rounded-full border p-1 mx-2" src="{{url_for('static', path='images/profile_pics')}}/{{user.username}}"  alt="{{user.username}}'s profile pic'"/>
 							</div>
@@ -28,5 +28,12 @@
 		</div>
 	{% endfor %}
 </div>
-<script src="{{url_for('static', path='js/search_users.js')}}"></script>
+<script>
+
+	// here you define the html elements that you use to conduct searching and filtering
+	window.parentContainerClassName = ".userCard";
+	window.primarySearchClass = ".fullname";
+	window.secondarySearchClass = ".username";
+</script>
+<script src="{{url_for('static', path='js/search.js')}}"></script>
 {% endblock %}

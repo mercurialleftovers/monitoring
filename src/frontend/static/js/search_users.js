@@ -5,7 +5,7 @@ document.querySelector("#searchSection").classList.remove("hidden");
 document.querySelector("#searchSection").classList.add("flex");
 
 function updateDeviceList(kw) {
-	const users = document.querySelectorAll(".userCard");
+	const users = document.querySelectorAll(window.parentContainerClassName);
 
 	if (kw === "") {
 		for (const user of users) user.classList.remove("hidden");
@@ -14,8 +14,8 @@ function updateDeviceList(kw) {
 	const regex = new RegExp(`.*${kw}.*`);
 
 	for (const user of users) {
-		let userFullName = user.querySelector(".fullname");
-		let userUsername = user.querySelector(".username");
+		let userFullName = user.querySelector(window.primarySearchClass);
+		let userUsername = user.querySelector(window.secondarySearchClass);
 
 		if (!userFullName || !userUsername) {
 			return;
